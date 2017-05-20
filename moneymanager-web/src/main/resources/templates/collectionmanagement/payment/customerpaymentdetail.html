@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head th:include="fragments/header"></head>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header" th:include="fragments/top" />
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar">
+		<br />
+		<hr />
+		<div class="w3-container">
+			<h5>Dashboard</h5>
+		</div>
+		<div class="w3-bar-block" th:include="fragments/menu" />
+	</nav>
+	<div
+		class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close"
+		title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Money Collection
+		</div>
+		<div class="w3-input w3-large">
+			<b>Customer Payment Detail</b>
+		</div>
+		<p class="success" th:text="${successMessage}"></p>
+		<p class="error" th:text="${errMessage}"></p>
+		<div class="w3-responsive">
+			<form th:action="@{/collection/payment/update}" method="post" th:object="${customerDetail}" class="w3-container w3-white" autocomplete="off">
+				<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="add">
+					<i class="w3-large fa fa-plus">&nbsp;&nbsp;Add</i>
+				</button>
+				<a href="/collection/myassignment/view" class="w3-btn w3-grey"><i class="w3-large fa fa-times">&nbsp;&nbsp;Cancel</i></a>
+				<input type="hidden" th:field="*{customerId}"/>
+				<input type="hidden" name="latitude"/>
+				<input type="hidden" name="longitude"/>
+				<div class="w3-row-padding">
+					<p>
+					  <div class="w3-half">
+					    <label>Region</label>
+					    <input class="w3-input" type="text" th:field="*{region}" readonly="readonly"/>
+					  </div>
+					  <div class="w3-half">
+					    <label>Building</label> 
+						<input class="w3-input" type="text" th:field="*{building}" readonly="readonly"/>
+					  </div>
+				    </p>
+				</div>
+				<div class="w3-row-padding">
+					<p>
+					  <div class="w3-half">
+					    <label>Address</label> 
+						<input class="w3-input" type="text" th:field="*{address}" readonly="readonly"/>
+					  </div>
+					  <div class="w3-half">
+					    <label>Client</label> 
+						<input class="w3-input" type="text" th:field="*{client}" readonly="readonly"/>
+					  </div>
+				  	</p>
+				</div>				
+				<div class="w3-row-padding">
+					<p>
+					  <div class="w3-half">
+					    <label>Name</label> 
+						<input class="w3-input" type="text" th:field="*{name}" readonly="readonly"/>
+					  </div>
+					  <div class="w3-half">
+					    <label>Floor</label> 
+						<input class="w3-input" type="text" th:field="*{floor}" readonly="readonly"/>
+					  </div>
+					 </p>
+				</div>
+				<div class="w3-row-padding">
+					<p>
+					  <div class="w3-half">
+					    <label>Fee</label> 
+						<input class="w3-input" type="text" th:field="*{fee}" readonly="readonly"/>
+					  </div>
+					  <div class="w3-half">
+					    <label>Paying</label> <i class="w3-large fa fa-pencil-square-o"></i>
+						<input class="w3-input" type="text" name="payingamount" value="0.00"/>
+					  </div>
+					</p>
+				</div>
+				<div class="w3-row-padding">
+					<p>
+					  <div class="w3-half">
+					    <label>Mahal</label> 
+						<input class="w3-input" type="text" th:field="*{mahal}" readonly="readonly"/>
+					  </div>
+					  <div class="w3-half">
+					    <label>Telephone</label> 
+						<input class="w3-input" type="text" th:field="*{telephone}" readonly="readonly"/>
+					  </div>
+					</p>
+				</div>
+				<div class="w3-row-padding">
+					<p>
+					  <div class="w3-half">
+					  <div class="w3-half">
+					    <label>Left/Travel</label> 
+						<input class="w3-input" type="text" th:field="*{leftTravel}" readonly="readonly"/>
+					  </div>
+					  </div>
+					  <div class="w3-half">
+					    
+					  </div>
+				  	</p>
+				</div>
+				<p>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="add">
+						<i class="w3-large fa fa-plus">&nbsp;&nbsp;Add</i>
+					</button>
+					<a href="/collection/myassignment/view" class="w3-btn w3-grey"><i class="w3-large fa fa-times">&nbsp;&nbsp;Cancel</i></a>
+				</p>
+			</form>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/lib/dataTables.responsive.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

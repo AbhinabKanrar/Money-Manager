@@ -1,0 +1,20 @@
+git remote rm heroku
+
+heroku login
+
+heroku create moneymanager001
+
+heroku addons:create heroku-postgresql
+
+heroku addons
+
+git push heroku master
+
+heroku open
+
+heroku logs --tail
+
+heroku ps:scale web=1
+
+
+heroku pg:psql

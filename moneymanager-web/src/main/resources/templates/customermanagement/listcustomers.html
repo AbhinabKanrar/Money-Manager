@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head th:include="fragments/header"/>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header" th:include="fragments/top"/>
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar"><br/>
+	  <hr/>
+	  <div class="w3-container">
+	    <h5>Dashboard</h5>
+	  </div>
+	  <div class="w3-bar-block" th:include="fragments/menu"/>
+	</nav>
+	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Customer Management
+		</div>
+		<div class="w3-container">
+			<div class="w3-input w3-large">
+				<b>View Customers</b>
+			</div>
+			<p>
+				<a href="/customer/add" class="w3-button w3-green">Add New Customer</a>
+				&nbsp;&nbsp;
+				<a href="/collection/sync" class="w3-button w3-green">Sync With System</a>
+			</p>
+		</div>
+		<p class="success" th:text="${successMessage}"></p>
+		<p class="error" th:text="${errMessage}"></p>
+		<div class="w3-responsive">
+			<table id="datatable" class="display responsive nowrap cell-border"
+				cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th>Customer ID</th>
+						<th>Region</th>
+						<th>Building</th>
+						<th>Address</th>
+						<th>Client</th>
+						<th>Name</th>
+						<th>Floor</th>
+						<th>Fee</th>
+						<th>Mahal</th>
+						<th>Telephone</th>
+						<th>Left/travel</th>
+						<th>Note</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="customer : ${customers}">
+						<td th:text="${customer.customerId}"></td>
+						<td th:text="${customer.region}"></td>
+						<td th:text="${customer.building}"></td>
+						<td th:text="${customer.address}"></td>
+						<td th:text="${customer.client}"></td>
+						<td th:text="${customer.name}"></td>
+						<td th:text="${customer.floor}"></td>
+						<td th:text="${customer.fee}"></td>
+						<td th:text="${customer.mahal}"></td>
+						<td th:text="${customer.telephone}"></td>
+						<td th:text="${customer.leftTravel}"></td>
+						<td th:text="${customer.note}"></td>
+						<td><a th:href="@{|/customer/find/${customer.customerId}|}" class="w3-button w3-green">Edit</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/lib/dataTables.responsive.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

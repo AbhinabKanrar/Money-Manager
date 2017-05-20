@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head th:include="fragments/header"></head>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header" th:include="fragments/top" />
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar">
+		<br />
+		<hr />
+		<div class="w3-container">
+			<h5>Dashboard</h5>
+		</div>
+		<div class="w3-bar-block" th:include="fragments/menu" />
+	</nav>
+	<div
+		class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close"
+		title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Money Collection
+		</div>
+		<div class="w3-input w3-large">
+			<b>Bulk Assignments</b>
+		</div>
+		<p class="success" th:text="${successMessage}"></p>
+		<p class="error" th:text="${errMessage}"></p>
+		<div class="w3-responsive">
+			<form th:action="@{/collection/assign}" th:object="${customerDetail}" method="post" class="w3-container w3-white" autocomplete="off">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				<p>
+					<label th:if="${customerDetail.region} == null and ${customerDetail.building} == null">Allocate Region</label>
+					<label th:if="${customerDetail.region} != null">Allocated Region</label>
+					<select th:if="${customerDetail.region} == null and ${customerDetail.building} == null" class="w3-select" required="required" th:field="*{region}">
+						<option th:each="customerDetail : ${customerDetails}" th:value="${customerDetail.region}" th:text="${customerDetail.region}"></option>
+					</select>
+					<input th:if="${customerDetail.region} != null" class="w3-input" type="text" th:value="${customerDetail.region}" th:field="*{region}" readonly="true"/>
+				</p>
+				<p>
+					<label th:if="${customerDetail.region} != null and ${customerDetail.building} == null">Allocate Building</label>
+					<label th:if="${customerDetail.building} != null">Allocated Building</label>
+					<select th:if="${customerDetail.region} != null and ${customerDetail.building} == null" class="w3-select" required="required" th:field="*{building}">
+						<option th:each="customerDetail : ${customerDetails}" th:value="${customerDetail.building}" th:text="${customerDetail.building}"></option>
+					</select>
+					<input th:if="${customerDetail.building} != null" class="w3-input" type="text" th:value="${customerDetail.building}" th:field="*{building}" readonly="true"/>
+				</p>
+				<p th:if="${customerDetail.region} != null and ${customerDetail.building} != null">
+					<label th:if="${status} != 1">Allocate Collector</label>
+					<select th:if="${status} != 1" class="w3-select" required="required" th:field="*{collectorId}">
+						<option th:each="employee : ${employees}" th:value="${employee.employeeId}" th:text="${employee.username}"></option>
+					</select>
+					<label th:if="${status} == 1">Allocated Collector</label>
+					<input type="text" class="w3-input" th:if="${status} == 1" th:field="*{collectorId}"/>
+				</p>
+				<p>
+					<button th:if="${customerDetail.region} == null or ${customerDetail.building} == null" class="w3-button w3-lime" type="submit" name="action" value="add">
+						<i class="w3-large fa fa-arrow-right">&nbsp;&nbsp;Next</i>
+					</button>
+					<button th:if="${customerDetail.region} != null and ${customerDetail.building} != null and ${status} != 1" class="w3-button w3-lime" type="submit" name="action" value="add">
+						<i class="w3-large fa fa-arrow-right">&nbsp;&nbsp;Assign</i>
+					</button> 
+				</p>
+			</form>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/lib/dataTables.responsive.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head th:include="fragments/header"/>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header" th:include="fragments/top"/>
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar"><br/>
+	  <hr/>
+	  <div class="w3-container">
+	    <h5>Dashboard</h5>
+	  </div>
+	  <div class="w3-bar-block" th:include="fragments/menu"/>
+	</nav>
+	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Customer Management
+		</div>
+		<div th:if="${status} != 1 and ${status} != 2" class="w3-input w3-large">
+			<b>Add Customer</b>
+		</div>
+		<div th:if="${status} == 1" class="w3-input w3-large">
+			<b>Update Customer</b>
+		</div>
+		<p class="success" th:text="${successMessage}"></p>
+		<p class="error" th:text="${errMessage}"></p>
+		<form th:action="@{/customer/addupdate}" method="post" th:object="${customer}" class="w3-container w3-white" autocomplete="off">
+			<p th:if="${status} != 1 and ${status} != 2">
+				<span>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="add">
+						<i class="w3-large fa fa-plus">&nbsp;&nbsp;Add</i>
+					</button>
+				</span>
+				<span>
+					<button class="w3-button w3-grey" type="reset">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Reset</i>
+					</button>
+				</span>
+				<span>
+					<a href="/customer/add/excel" class="w3-button w3-green">Add From Excel</a>
+				</span>
+			</p>
+			<p th:if="${status} == 1">
+				<span>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
+					</button>
+				</span>
+				<span>
+					<button class="w3-button w3-grey" type="submit" name="action" value="delete">
+						<i class="w3-large fa fa-trash-o">&nbsp;&nbsp;Delete</i>
+					</button>
+				</span>
+				<input type="hidden" th:field="*{customerId}" required="required"/>
+			</p>
+			<p th:if="${status} == 2">
+				<a href="/customer/view" class="w3-button w3-green">Back</a>
+			</p>
+			<p>
+				<label>Region</label> 
+				<input class="w3-input" type="text" placeholder="Enter Region" th:field="*{region}" required="required"/>
+			</p>
+			<p>
+				<label>Building</label> 
+				<input class="w3-input" type="text" placeholder="Enter Building" th:field="*{building}" required="required"/>
+			</p>
+			<p>
+				<label>Address</label> 
+				<input class="w3-input" type="text" placeholder="Enter Address" th:field="*{address}" required="required"/>
+			</p>
+			<p>
+				<label>Client</label> 
+				<input class="w3-input" type="text" placeholder="Enter Client" th:field="*{client}"/>
+			</p>
+			<p>
+				<label>Name</label> 
+				<input class="w3-input" type="text" placeholder="Enter Name" th:field="*{name}"/>
+			</p>
+			<p>
+				<label>Floor</label> 
+				<input class="w3-input" type="text" placeholder="Enter Floor" th:field="*{floor}"/>
+			</p>
+			<p>
+				<label>Fee</label> 
+				<input class="w3-input" type="text" th:field="*{fee}"/>
+			</p>
+			<p>
+				<label>Mahal</label> 
+				<input class="w3-input" type="text" placeholder="Enter Mahal" th:field="*{mahal}"/>
+			</p>
+			<p>
+				<label>Telephone</label> 
+				<input class="w3-input" type="text" placeholder="Enter Telephone" th:field="*{telephone}"/>
+			</p>
+			<p>
+				<label>Left/Travel</label> 
+				<input class="w3-input" type="text" placeholder="Enter Left/Travel" th:field="*{leftTravel}"/>
+			</p>
+			<p>
+				<label>Note</label>
+				<input class="w3-input" type="text" placeholder="Enter Note" th:field="*{note}"/>
+			</p>
+			<p th:if="${status} != 1 and ${status} != 2">
+				<span>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="add">
+						<i class="w3-large fa fa-plus">&nbsp;&nbsp;Add</i>
+					</button>
+				</span>
+				<span>
+					<button class="w3-button w3-grey" type="reset">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Reset</i>
+					</button>
+				</span>
+				<span>
+					<a href="/customer/add/excel" class="w3-button w3-green">Add From Excel</a>
+				</span>
+			</p>
+			<p th:if="${status} == 1">
+				<span>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
+					</button>
+				</span>
+				<span>
+					<button class="w3-button w3-grey" type="submit" name="action" value="delete">
+						<i class="w3-large fa fa-trash-o">&nbsp;&nbsp;Delete</i>
+					</button>
+				</span>
+			</p>
+		</form>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/lib/dataTables.responsive.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>
