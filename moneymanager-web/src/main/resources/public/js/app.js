@@ -17,6 +17,9 @@ $(document).ready(function() {
 	$('#datatable').DataTable({
 		paging : false
 	});
+	$('#mappingdatatable').DataTable({
+		paging : false
+	});
 	$("#customer-collectorid-edit-button").click(function() {
 	    $("#customer-collectorid-select").removeClass("w3-hide");
 	    $("#customer-collectorid-text").removeClass("w3-show").addClass("w3-hide");

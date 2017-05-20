@@ -15,7 +15,43 @@
 	</nav>
 	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
 	<div class="w3-main" id="ui-view">
-		HELLO WORLD
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Quick Links
+		</div>
+				<div class="w3-responsive">
+			<div class="w3-row-padding w3-margin-bottom">
+				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}"
+					class="w3-quarter">
+					<a href="/customer/view">
+						<div class="w3-container w3-red w3-padding-16">
+							<div class="w3-left">
+								<i class="fa fa-share-alt w3-xxxlarge"></i>
+							</div>
+							<div class="w3-right">
+								<h3>52</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>View Customer</h4>
+						</div>
+					</a>
+				</div>
+				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}"
+					class="w3-quarter">
+					<a href="/user/view">
+						<div class="w3-container w3-teal w3-padding-16">
+							<div class="w3-left">
+								<i class="fa fa-eye w3-xxxlarge"></i>
+							</div>
+							<div class="w3-right">
+								<h3>52</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>View User</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
 	</div>
 	<script src="/js/lib/jquery.min.js"></script>
 	<script src="/js/lib/jquery.dataTables.min.js"></script>

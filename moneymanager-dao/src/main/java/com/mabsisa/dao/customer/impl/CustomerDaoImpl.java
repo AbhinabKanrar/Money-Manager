@@ -3,9 +3,9 @@ package com.mabsisa.dao.customer.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -81,7 +81,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
 		customerCollectionDetail.setCustomerId(customer.getCustomerId());
-		save(customerCollectionDetail);
+		saveCustomerToCollectionMapping(customerCollectionDetail);
 		
 		return customer;
 	}
@@ -94,7 +94,9 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object>[] params = new Map[customers.size()];
-
+		List<CustomerCollectionDetail> customerCollectionDetails = new ArrayList<CustomerCollectionDetail>();
+		CustomerCollectionDetail customerCollectionDetail;
+		
 		for (Customer customer : customers) {
 			Map<String, Object> param = new HashMap<String, Object>(13);
 			
@@ -113,17 +115,22 @@ public class CustomerDaoImpl implements CustomerDao {
 			param.put("left_travel", customer.getLeftTravel());
 			param.put("note", customer.getNote());
 
+			customerCollectionDetail = new CustomerCollectionDetail();
+			customerCollectionDetail.setCustomerId(customer.getCustomerId());
+			customerCollectionDetails.add(customerCollectionDetail);
+			
 			params[counter] = param;
 			counter++;
 		}
 
 		jdbcNTemplate.batchUpdate(INSERT_SQL, params);
+		
+		saveCustomerToCollectionMapping(customerCollectionDetails);
 
 		return customers;
 	}
 
-	@Override
-	public CustomerCollectionDetail save(CustomerCollectionDetail customerCollectionDetail) {
+	public CustomerCollectionDetail saveCustomerToCollectionMapping(CustomerCollectionDetail customerCollectionDetail) {
 
 		Map<String, Object> param = new HashMap<>(15);
 
@@ -131,7 +138,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		param.put("collection_id", customerCollectionDetail.getCollectionId());
 		param.put("customer_id", customerCollectionDetail.getCustomerId());
-		param.put("collector_id", customerCollectionDetail.getCollectorId());
+		param.put("collector_id", null);
 		param.put("jan_fee", customerCollectionDetail.getJanFee());
 		param.put("feb_fee", customerCollectionDetail.getFebFee());
 		param.put("mar_fee", customerCollectionDetail.getMarFee());
@@ -148,6 +155,42 @@ public class CustomerDaoImpl implements CustomerDao {
 		jdbcNTemplate.update(INSERT_COLLECTION_SQL, param);
 
 		return customerCollectionDetail;
+	}
+	
+	public List<CustomerCollectionDetail> saveCustomerToCollectionMapping(List<CustomerCollectionDetail> customerCollectionDetails) {
+		int counter = 0;
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object>[] params = new Map[customerCollectionDetails.size()];
+		
+		for(CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+			Map<String, Object> param = new HashMap<>(15);
+
+			customerCollectionDetail.setCollectionId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+
+			param.put("collection_id", customerCollectionDetail.getCollectionId());
+			param.put("customer_id", customerCollectionDetail.getCustomerId());
+			param.put("collector_id", null);
+			param.put("jan_fee", customerCollectionDetail.getJanFee());
+			param.put("feb_fee", customerCollectionDetail.getFebFee());
+			param.put("mar_fee", customerCollectionDetail.getMarFee());
+			param.put("apr_fee", customerCollectionDetail.getAprFee());
+			param.put("may_fee", customerCollectionDetail.getMarFee());
+			param.put("jun_fee", customerCollectionDetail.getJunFee());
+			param.put("jul_fee", customerCollectionDetail.getJulFee());
+			param.put("aug_fee", customerCollectionDetail.getAugFee());
+			param.put("sep_fee", customerCollectionDetail.getSepFee());
+			param.put("oct_fee", customerCollectionDetail.getOctFee());
+			param.put("nov_fee", customerCollectionDetail.getNovFee());
+			param.put("dec_fee", customerCollectionDetail.getDecFee());
+			
+			params[counter] = param;
+			counter++;
+		}
+
+		jdbcNTemplate.batchUpdate(INSERT_COLLECTION_SQL, params);
+		
+		return customerCollectionDetails;
 	}
 	
 	@Override

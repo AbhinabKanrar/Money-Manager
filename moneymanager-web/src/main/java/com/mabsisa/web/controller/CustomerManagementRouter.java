@@ -43,7 +43,6 @@ public class CustomerManagementRouter {
 		try {
 			customers = customerService.findAll();
 		} catch (Exception e) {
-			e.printStackTrace();
 			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
 		}
 		model.addAttribute("customers", customers);

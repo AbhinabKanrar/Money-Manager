@@ -21,9 +21,6 @@ public interface CustomerDao {
 
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	Customer save(Customer customer);
-	
-	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
-	CustomerCollectionDetail save(CustomerCollectionDetail customerCollectionDetail);
 
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	List<Customer> save(List<Customer> customers);
