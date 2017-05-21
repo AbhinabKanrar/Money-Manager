@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head th:include="fragments/header"/>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header" th:include="fragments/top"/>
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar"><br/>
+	  <hr/>
+	  <div class="w3-container">
+	    <h5>Dashboard</h5>
+	  </div>
+	  <div class="w3-bar-block" th:include="fragments/menu"/>
+	</nav>
+	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Customer Billing History
+		</div>
+		<div class="w3-input w3-large">
+			<b>View Billing History</b>
+		</div>
+		<p class="success" th:text="${successMessage}"></p>
+		<p class="error" th:text="${errMessage}"></p>
+		<form th:action="@{/collection/addupdate}" method="post" th:object="${customerCollectionDetail}" class="w3-container w3-white" autocomplete="off">
+			<p>
+				<span>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
+					</button>
+					<a href="/collection/view" class="w3-button w3-green">Back</a>
+				</span>
+			</p>
+
+			<div class="w3-responsive">
+				<input type="hidden" th:field="*{collectionId}" required="required"/>
+				<input type="hidden" th:field="*{customerId}" required="required"/>
+				<input type="hidden" th:field="*{region}"/>
+				<input type="hidden" th:field="*{building}"/>
+				<input type="hidden" th:field="*{address}"/>
+				<input type="hidden" th:field="*{client}"/>
+				<input type="hidden" th:field="*{name}"/>
+				<input type="hidden" th:field="*{floor}"/>
+				<input type="hidden" th:field="*{fee}"/>
+				<input type="hidden" th:field="*{mahal}"/>
+				<input type="hidden" th:field="*{telephone}"/>
+				<input type="hidden" th:field="*{leftTravel}"/>
+				<input type="hidden" th:field="*{note}"/>
+				<input type="hidden" th:field="*{janFee}"/>
+				<input type="hidden" th:field="*{febFee}"/>
+				<input type="hidden" th:field="*{marFee}"/>
+				<input type="hidden" th:field="*{aprFee}"/>
+				<input type="hidden" th:field="*{mayFee}"/>
+				<input type="hidden" th:field="*{junFee}"/>
+				<input type="hidden" th:field="*{julFee}"/>
+				<input type="hidden" th:field="*{augFee}"/>
+				<input type="hidden" th:field="*{sepFee}"/>
+				<input type="hidden" th:field="*{octFee}"/>
+				<input type="hidden" th:field="*{novFee}"/>
+				<input type="hidden" th:field="*{decFee}"/>
+				
+				<table id="mappingdatatable" class="display responsive nowrap cell-border"
+					cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>Customer ID</th>
+							<th>Collector ID</th>
+							<th>Region</th>
+							<th>Building</th>
+							<th>Address</th>
+							<th>Client</th>
+							<th>Name</th>
+							<th>Floor</th>
+							<th>Fee</th>
+							<th>Mahal</th>
+							<th>Telephone</th>
+							<th>Left/travel</th>
+							<th>Note</th>
+							<th>January Fee</th>
+							<th>February Fee</th>
+							<th>March Fee</th>
+							<th>April Fee</th>
+							<th>May Fee</th>
+							<th>June Fee</th>
+							<th>July Fee</th>
+							<th>August Fee</th>
+							<th>September Fee</th>
+							<th>October Fee</th>
+							<th>November Fee</th>
+							<th>December Fee</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td th:text="${customerCollectionDetail.customerId}"></td>
+							<td>
+								<select th:field="*{collectorId}" required="required">
+									<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.userId} + '  (' + ${user.username} + ')'"></option>
+								</select>
+							</td>
+							<td th:text="${customerCollectionDetail.region}"></td>
+							<td th:text="${customerCollectionDetail.building}"></td>
+							<td th:text="${customerCollectionDetail.address}"></td>
+							<td th:text="${customerCollectionDetail.client}"></td>
+							<td th:text="${customerCollectionDetail.name}"></td>
+							<td th:text="${customerCollectionDetail.floor}"></td>
+							<td th:text="${customerCollectionDetail.fee}"></td>
+							<td th:text="${customerCollectionDetail.mahal}"></td>
+							<td th:text="${customerCollectionDetail.telephone}"></td>
+							<td th:text="${customerCollectionDetail.leftTravel}"></td>
+							<td th:text="${customerCollectionDetail.note}"></td>
+							<td th:text="${customerCollectionDetail.janFee != 0} ? ${customerCollectionDetail.janFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.febFee != 0} ? ${customerCollectionDetail.febFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.marFee != 0} ? ${customerCollectionDetail.marFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.aprFee != 0} ? ${customerCollectionDetail.aprFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.mayFee != 0} ? ${customerCollectionDetail.mayFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.junFee != 0} ? ${customerCollectionDetail.junFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.julFee != 0} ? ${customerCollectionDetail.julFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.augFee != 0} ? ${customerCollectionDetail.augFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.sepFee != 0} ? ${customerCollectionDetail.sepFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.octFee != 0} ? ${customerCollectionDetail.octFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.novFee != 0} ? ${customerCollectionDetail.novFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.decFee != 0} ? ${customerCollectionDetail.decFee} : '-'"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<p>
+				<span>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
+					</button>
+					<a href="/collection/view" class="w3-button w3-green">Back</a>
+				</span>
+			</p>
+		</form>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

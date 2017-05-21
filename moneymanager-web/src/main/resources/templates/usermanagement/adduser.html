@@ -39,7 +39,7 @@
 					</button>
 				</span>
 			</p>
-			<p th:if="${status} == 1">
+			<p th:if="${status} == 1 and ${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" >
 				<span>
 					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
 						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
@@ -95,7 +95,7 @@
 					</button>
 				</span>
 			</p>
-			<p th:if="${status} == 1">
+			<p th:if="${status} == 1 and ${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" >
 				<span>
 					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
 						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>

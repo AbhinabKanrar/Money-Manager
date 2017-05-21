@@ -40,6 +40,7 @@ public class CustomerCollectionDetail implements Serializable {
 	private BigDecimal octFee;
 	private BigDecimal novFee;
 	private BigDecimal decFee;
+	private BigDecimal due;
 
 	public Long getCollectionId() {
 		return collectionId;
@@ -196,6 +197,12 @@ public class CustomerCollectionDetail implements Serializable {
 	}
 	public void setDecFee(BigDecimal decFee) {
 		this.decFee = decFee;
+	}
+	public BigDecimal getDue() {
+		return due;
+	}
+	public void setDue(BigDecimal due) {
+		this.due = due;
 	}
 
 }

@@ -13,6 +13,10 @@ import com.mabsisa.common.model.CustomerCollectionDetail;
  */
 public interface CustomerCollectionService {
 
+	CustomerCollectionDetail update(CustomerCollectionDetail customerCollectionDetail);
 	List<CustomerCollectionDetail> findAll();
+	CustomerCollectionDetail findByCollectionId(long collectionId);
+	List<CustomerCollectionDetail> findByCollectorName(String collectorName);
+	CustomerCollectionDetail findCollectionByCollectionId(long collectionId);
 	
 }
