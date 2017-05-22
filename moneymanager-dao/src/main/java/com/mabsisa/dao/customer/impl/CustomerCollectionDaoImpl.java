@@ -59,6 +59,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "mm.customer_detail cust join mm.customer_collection_detail collection "
 			+ "on cust.customer_id=collection.customer_id "
 			+ "where collection.collection_id = :collection_id";
+	
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
 
 	@Override
@@ -80,18 +81,30 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 				oldCustomerCollectionDetail.setCollectorId(rs.getLong("collector_id"));
 				oldCustomerCollectionDetail.setJanFee(rs.getBigDecimal("jan_fee"));
 				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("feb_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("mar_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("apr_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("may_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("jun_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("jul_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("aug_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("sep_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("oct_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("nov_fee"));
-				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("dec_fee")); 
+				oldCustomerCollectionDetail.setMarFee(rs.getBigDecimal("mar_fee"));
+				oldCustomerCollectionDetail.setAprFee(rs.getBigDecimal("apr_fee"));
+				oldCustomerCollectionDetail.setMayFee(rs.getBigDecimal("may_fee"));
+				oldCustomerCollectionDetail.setJunFee(rs.getBigDecimal("jun_fee"));
+				oldCustomerCollectionDetail.setJulFee(rs.getBigDecimal("jul_fee"));
+				oldCustomerCollectionDetail.setAugFee(rs.getBigDecimal("aug_fee"));
+				oldCustomerCollectionDetail.setSepFee(rs.getBigDecimal("sep_fee"));
+				oldCustomerCollectionDetail.setOctFee(rs.getBigDecimal("oct_fee"));
+				oldCustomerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
+				oldCustomerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
 
 				rs.updateLong("collector_id", customerCollectionDetail.getCollectorId());
+				rs.updateBigDecimal("jan_fee", customerCollectionDetail.getJanFee());
+				rs.updateBigDecimal("feb_fee", customerCollectionDetail.getFebFee());
+				rs.updateBigDecimal("mar_fee", customerCollectionDetail.getMarFee());
+				rs.updateBigDecimal("apr_fee", customerCollectionDetail.getAprFee());
+				rs.updateBigDecimal("may_fee", customerCollectionDetail.getMayFee());
+				rs.updateBigDecimal("jun_fee", customerCollectionDetail.getJunFee());
+				rs.updateBigDecimal("jul_fee", customerCollectionDetail.getJulFee());
+				rs.updateBigDecimal("aug_fee", customerCollectionDetail.getAugFee());
+				rs.updateBigDecimal("sep_fee", customerCollectionDetail.getSepFee());
+				rs.updateBigDecimal("oct_fee", customerCollectionDetail.getOctFee());
+				rs.updateBigDecimal("nov_fee", customerCollectionDetail.getNovFee());
+				rs.updateBigDecimal("dec_fee", customerCollectionDetail.getDecFee());
 
 				rs.updateRow();
 			}
@@ -129,17 +142,17 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 						customerCollectionDetail.setNote(rs.getString("note"));
 						customerCollectionDetail.setJanFee(rs.getBigDecimal("jan_fee"));
 						customerCollectionDetail.setFebFee(rs.getBigDecimal("feb_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("mar_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("apr_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("may_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("jun_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("jul_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("aug_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("sep_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("oct_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("nov_fee"));
-						customerCollectionDetail.setFebFee(rs.getBigDecimal("dec_fee"));
-
+						customerCollectionDetail.setMarFee(rs.getBigDecimal("mar_fee"));
+						customerCollectionDetail.setAprFee(rs.getBigDecimal("apr_fee"));
+						customerCollectionDetail.setMayFee(rs.getBigDecimal("may_fee"));
+						customerCollectionDetail.setJunFee(rs.getBigDecimal("jun_fee"));
+						customerCollectionDetail.setJulFee(rs.getBigDecimal("jul_fee"));
+						customerCollectionDetail.setAugFee(rs.getBigDecimal("aug_fee"));
+						customerCollectionDetail.setSepFee(rs.getBigDecimal("sep_fee"));
+						customerCollectionDetail.setOctFee(rs.getBigDecimal("oct_fee"));
+						customerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
+						customerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
+		
 						return customerCollectionDetail;
 					}
 
@@ -178,16 +191,16 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 				customerCollectionDetail.setNote(rs.getString("note"));
 				customerCollectionDetail.setJanFee(rs.getBigDecimal("jan_fee"));
 				customerCollectionDetail.setFebFee(rs.getBigDecimal("feb_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("mar_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("apr_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("may_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("jun_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("jul_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("aug_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("sep_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("oct_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("nov_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("dec_fee"));
+				customerCollectionDetail.setMarFee(rs.getBigDecimal("mar_fee"));
+				customerCollectionDetail.setAprFee(rs.getBigDecimal("apr_fee"));
+				customerCollectionDetail.setMayFee(rs.getBigDecimal("may_fee"));
+				customerCollectionDetail.setJunFee(rs.getBigDecimal("jun_fee"));
+				customerCollectionDetail.setJulFee(rs.getBigDecimal("jul_fee"));
+				customerCollectionDetail.setAugFee(rs.getBigDecimal("aug_fee"));
+				customerCollectionDetail.setSepFee(rs.getBigDecimal("sep_fee"));
+				customerCollectionDetail.setOctFee(rs.getBigDecimal("oct_fee"));
+				customerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
+				customerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
 				
 				return customerCollectionDetail;
 			}

@@ -32,6 +32,10 @@ import com.mabsisa.common.model.Customer;
  *
  */
 public class CommonUtils {
+
+	public static void main(String[] args) {
+		
+	}
 	
 	private static final DateFormat dateFormat = new SimpleDateFormat("MMyyyy");
 	
@@ -51,6 +55,10 @@ public class CommonUtils {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, monthCount);
 		return dateFormat.format(cal.getTime());
+	}
+	
+	public static int getCurrentMonth() {
+		return Calendar.getInstance().get(Calendar.MONTH) + 1;
 	}
 	
 	public static String getLoggedInUserAccess() {

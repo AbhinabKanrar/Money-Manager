@@ -83,7 +83,7 @@
 						<td th:text="${customerCollectionDetail.novFee != 0} ? ${customerCollectionDetail.novFee} : '-'"></td>
 						<td th:text="${customerCollectionDetail.decFee != 0} ? ${customerCollectionDetail.decFee} : '-'"></td>
 						<td>
-							<a th:href="@{|/collection/collect/${customerCollectionDetail.collectionId}|}" class="w3-button w3-green">Collect</a>
+							<a th:href="@{|/collection/view/assignment/${customerCollectionDetail.collectionId}|}" class="w3-button w3-green">Collect</a>
 						</td>
 					</tr>
 				</tbody>

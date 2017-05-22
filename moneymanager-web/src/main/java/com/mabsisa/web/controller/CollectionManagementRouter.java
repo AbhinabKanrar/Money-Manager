@@ -47,6 +47,9 @@ public class CollectionManagementRouter {
 		List<CustomerCollectionDetail> customerCollectionDetails = new ArrayList<CustomerCollectionDetail>();
 		try {
 			customerCollectionDetails = customerCollectionService.findAll();
+			System.out.println(customerCollectionDetails.get(0).getJanFee());
+			System.out.println(customerCollectionDetails.get(0).getFebFee());
+			System.out.println(customerCollectionDetails.get(0).getMarFee());
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
@@ -85,6 +88,20 @@ public class CollectionManagementRouter {
 		model.addAttribute("customerCollectionDetails", customerCollectionDetails);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "collectionmanagement/listassignment";
+	}
+	
+	@GetMapping("/view/assignment/{collectionId}")
+	public String viewCollection(@PathVariable("collectionId") String collectionId, Model model) {
+		CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
+		try {
+			customerCollectionDetail = customerCollectionService.findCollectionByCollectionId(Long.valueOf(collectionId));
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("customerCollectionDetail", customerCollectionDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/addupdatecollection";
 	}
 
 	@PostMapping(value = "/addupdate", params = "action=update")

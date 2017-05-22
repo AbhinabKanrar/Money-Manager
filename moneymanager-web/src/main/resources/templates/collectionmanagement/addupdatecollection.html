@@ -26,27 +26,16 @@
 		<form th:action="@{/collection/addupdate}" method="post" th:object="${customerCollectionDetail}" class="w3-container w3-white" autocomplete="off">
 			<p>
 				<span>
-					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
-						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="collect">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Collect</i>
 					</button>
-					<a href="/collection/view" class="w3-button w3-green">Back</a>
+					<a href="/collection/view/assignment" class="w3-button w3-green">Back</a>
 				</span>
 			</p>
 
 			<div class="w3-responsive">
 				<input type="hidden" th:field="*{collectionId}" required="required"/>
 				<input type="hidden" th:field="*{customerId}" required="required"/>
-				<input type="hidden" th:field="*{region}"/>
-				<input type="hidden" th:field="*{building}"/>
-				<input type="hidden" th:field="*{address}"/>
-				<input type="hidden" th:field="*{client}"/>
-				<input type="hidden" th:field="*{name}"/>
-				<input type="hidden" th:field="*{floor}"/>
-				<input type="hidden" th:field="*{fee}"/>
-				<input type="hidden" th:field="*{mahal}"/>
-				<input type="hidden" th:field="*{telephone}"/>
-				<input type="hidden" th:field="*{leftTravel}"/>
-				<input type="hidden" th:field="*{note}"/>
 				
 				<table id="mappingdatatable" class="display responsive nowrap cell-border"
 					cellspacing="0" width="100%">
@@ -82,11 +71,7 @@
 					<tbody>
 						<tr>
 							<td th:text="${customerCollectionDetail.customerId}"></td>
-							<td>
-								<select th:field="*{collectorId}" required="required">
-									<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.userId} + '  (' + ${user.username} + ')'"></option>
-								</select>
-							</td>
+							<td th:text="${customerCollectionDetail.collectorId != 0} ? ${customerCollectionDetail.collectorId} : '-'"></td>
 							<td th:text="${customerCollectionDetail.region}"></td>
 							<td th:text="${customerCollectionDetail.building}"></td>
 							<td th:text="${customerCollectionDetail.address}"></td>
@@ -98,53 +83,29 @@
 							<td th:text="${customerCollectionDetail.telephone}"></td>
 							<td th:text="${customerCollectionDetail.leftTravel}"></td>
 							<td th:text="${customerCollectionDetail.note}"></td>
-							<td>
-								<input type="text" th:field="*{janFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{febFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{marFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{aprFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{mayFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{junFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{julFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{augFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{sepFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{octFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{novFee}" required="required"/>
-							</td>
-							<td>
-								<input type="text" th:field="*{decFee}" required="required"/>
-							</td>
+							<td th:text="${customerCollectionDetail.janFee != 0} ? ${customerCollectionDetail.janFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.febFee != 0} ? ${customerCollectionDetail.febFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.marFee != 0} ? ${customerCollectionDetail.marFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.aprFee != 0} ? ${customerCollectionDetail.aprFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.mayFee != 0} ? ${customerCollectionDetail.mayFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.junFee != 0} ? ${customerCollectionDetail.junFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.julFee != 0} ? ${customerCollectionDetail.julFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.augFee != 0} ? ${customerCollectionDetail.augFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.sepFee != 0} ? ${customerCollectionDetail.sepFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.octFee != 0} ? ${customerCollectionDetail.octFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.novFee != 0} ? ${customerCollectionDetail.novFee} : '-'"></td>
+							<td th:text="${customerCollectionDetail.decFee != 0} ? ${customerCollectionDetail.decFee} : '-'"></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-
+			<input class="w3-input" type="text" th:field="*{due}"/>
 			<p>
 				<span>
-					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
-						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
+					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="collect">
+						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Collect</i>
 					</button>
-					<a href="/collection/view" class="w3-button w3-green">Back</a>
+					<a href="/collection/view/assignment" class="w3-button w3-green">Back</a>
 				</span>
 			</p>
 		</form>

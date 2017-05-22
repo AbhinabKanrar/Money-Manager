@@ -1,5 +1,6 @@
 package com.mabsisa.dao.customer.impl;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -139,18 +140,18 @@ public class CustomerDaoImpl implements CustomerDao {
 		param.put("collection_id", customerCollectionDetail.getCollectionId());
 		param.put("customer_id", customerCollectionDetail.getCustomerId());
 		param.put("collector_id", null);
-		param.put("jan_fee", customerCollectionDetail.getJanFee());
-		param.put("feb_fee", customerCollectionDetail.getFebFee());
-		param.put("mar_fee", customerCollectionDetail.getMarFee());
-		param.put("apr_fee", customerCollectionDetail.getAprFee());
-		param.put("may_fee", customerCollectionDetail.getMarFee());
-		param.put("jun_fee", customerCollectionDetail.getJunFee());
-		param.put("jul_fee", customerCollectionDetail.getJulFee());
-		param.put("aug_fee", customerCollectionDetail.getAugFee());
-		param.put("sep_fee", customerCollectionDetail.getSepFee());
-		param.put("oct_fee", customerCollectionDetail.getOctFee());
-		param.put("nov_fee", customerCollectionDetail.getNovFee());
-		param.put("dec_fee", customerCollectionDetail.getDecFee());
+		param.put("jan_fee", BigDecimal.ZERO);
+		param.put("feb_fee", BigDecimal.ZERO);
+		param.put("mar_fee", BigDecimal.ZERO);
+		param.put("apr_fee", BigDecimal.ZERO);
+		param.put("may_fee", BigDecimal.ZERO);
+		param.put("jun_fee", BigDecimal.ZERO);
+		param.put("jul_fee", BigDecimal.ZERO);
+		param.put("aug_fee", BigDecimal.ZERO);
+		param.put("sep_fee", BigDecimal.ZERO);
+		param.put("oct_fee", BigDecimal.ZERO);
+		param.put("nov_fee", BigDecimal.ZERO);
+		param.put("dec_fee", BigDecimal.ZERO);
 
 		jdbcNTemplate.update(INSERT_COLLECTION_SQL, param);
 
@@ -171,18 +172,18 @@ public class CustomerDaoImpl implements CustomerDao {
 			param.put("collection_id", customerCollectionDetail.getCollectionId());
 			param.put("customer_id", customerCollectionDetail.getCustomerId());
 			param.put("collector_id", null);
-			param.put("jan_fee", customerCollectionDetail.getJanFee());
-			param.put("feb_fee", customerCollectionDetail.getFebFee());
-			param.put("mar_fee", customerCollectionDetail.getMarFee());
-			param.put("apr_fee", customerCollectionDetail.getAprFee());
-			param.put("may_fee", customerCollectionDetail.getMarFee());
-			param.put("jun_fee", customerCollectionDetail.getJunFee());
-			param.put("jul_fee", customerCollectionDetail.getJulFee());
-			param.put("aug_fee", customerCollectionDetail.getAugFee());
-			param.put("sep_fee", customerCollectionDetail.getSepFee());
-			param.put("oct_fee", customerCollectionDetail.getOctFee());
-			param.put("nov_fee", customerCollectionDetail.getNovFee());
-			param.put("dec_fee", customerCollectionDetail.getDecFee());
+			param.put("jan_fee", BigDecimal.ZERO);
+			param.put("feb_fee", BigDecimal.ZERO);
+			param.put("mar_fee", BigDecimal.ZERO);
+			param.put("apr_fee", BigDecimal.ZERO);
+			param.put("may_fee", BigDecimal.ZERO);
+			param.put("jun_fee", BigDecimal.ZERO);
+			param.put("jul_fee", BigDecimal.ZERO);
+			param.put("aug_fee", BigDecimal.ZERO);
+			param.put("sep_fee", BigDecimal.ZERO);
+			param.put("oct_fee", BigDecimal.ZERO);
+			param.put("nov_fee", BigDecimal.ZERO);
+			param.put("dec_fee", BigDecimal.ZERO);
 			
 			params[counter] = param;
 			counter++;
