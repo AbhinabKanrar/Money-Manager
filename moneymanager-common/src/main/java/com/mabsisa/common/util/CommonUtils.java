@@ -74,11 +74,6 @@ public class CommonUtils {
 		try {
 			cell.setCellType(CellType.STRING);
 			return cell.getStringCellValue().toUpperCase();
-//			if (cell.getCellTypeEnum() == CellType.STRING) {
-//				return cell.getStringCellValue().toUpperCase();
-//			} else {
-//				return String.valueOf(cell.getNumericCellValue());
-//			}
 		} catch(Exception e) {
 			return "";
 		}
