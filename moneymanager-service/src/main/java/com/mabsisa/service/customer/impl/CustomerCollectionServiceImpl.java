@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
+import com.mabsisa.common.model.PaymentReceipt;
 import com.mabsisa.common.model.User;
 import com.mabsisa.common.util.CommonUtils;
 import com.mabsisa.dao.customer.CustomerCollectionDao;
@@ -38,6 +39,12 @@ public class CustomerCollectionServiceImpl implements CustomerCollectionService 
 	}
 
 	@Override
+	public CustomerCollectionDetail collect(CustomerCollectionDetail customerCollectionDetail) {
+		return customerCollectionDao.update(customerCollectionDetail, CommonUtils.getCurrentMonth() -1);
+	}
+
+	
+	@Override
 	public List<CustomerCollectionDetail> findAll() {
 		return customerCollectionDao.findAll();
 	}
@@ -55,7 +62,45 @@ public class CustomerCollectionServiceImpl implements CustomerCollectionService 
 			List<CustomerCollectionDetail> allCustomerCollectionDetails = customerCollectionDao.findAll();
 			if (allCustomerCollectionDetails != null && !allCustomerCollectionDetails.isEmpty()) {
 				customerCollectionDetails = allCustomerCollectionDetails.stream().filter(
-						customerCollectionDetail -> customerCollectionDetail.getCollectorId() == user.getUserId())
+						customerCollectionDetail -> {
+							if (customerCollectionDetail.getCollectorId() == user.getUserId()) {
+								BigDecimal fee = customerCollectionDetail.getFee();
+								BigDecimal janFee = customerCollectionDetail.getJanFee();
+								BigDecimal febFee = customerCollectionDetail.getFebFee();
+								BigDecimal marFee = customerCollectionDetail.getMarFee();
+								BigDecimal aprFee = customerCollectionDetail.getAprFee();
+								BigDecimal mayFee = customerCollectionDetail.getMayFee();
+								BigDecimal junFee = customerCollectionDetail.getJunFee();
+								BigDecimal julFee = customerCollectionDetail.getJulFee();
+								BigDecimal augFee = customerCollectionDetail.getAugFee();
+								BigDecimal sepFee = customerCollectionDetail.getSepFee();
+								BigDecimal octFee = customerCollectionDetail.getOctFee();
+								BigDecimal novFee = customerCollectionDetail.getNovFee();
+								BigDecimal decFee = customerCollectionDetail.getDecFee();
+								
+								BigDecimal expectedFee = fee.multiply(new BigDecimal(CommonUtils.getCurrentMonth()));
+								
+								BigDecimal pastFee = getDueMonthlyFee(janFee, Calendar.JANUARY)
+										.add(getDueMonthlyFee(febFee, Calendar.FEBRUARY))
+										.add(getDueMonthlyFee(marFee, Calendar.MARCH))
+										.add(getDueMonthlyFee(aprFee, Calendar.APRIL))
+										.add(getDueMonthlyFee(mayFee, Calendar.MAY))
+										.add(getDueMonthlyFee(junFee, Calendar.JUNE))
+										.add(getDueMonthlyFee(julFee, Calendar.JULY))
+										.add(getDueMonthlyFee(augFee, Calendar.AUGUST))
+										.add(getDueMonthlyFee(sepFee, Calendar.SEPTEMBER))
+										.add(getDueMonthlyFee(octFee, Calendar.OCTOBER))
+										.add(getDueMonthlyFee(novFee, Calendar.NOVEMBER))
+										.add(getDueMonthlyFee(decFee, Calendar.DECEMBER));
+								
+								if (expectedFee.compareTo(pastFee) > 0) {
+									return true;
+								}
+								
+								return false;
+							}
+							return false;
+						})
 						.collect(Collectors.toList());
 			}
 		}
@@ -102,6 +147,8 @@ public class CustomerCollectionServiceImpl implements CustomerCollectionService 
 				customerCollectionDetail.setDue(BigDecimal.ZERO);
 			}
 			
+			customerCollectionDetail.setActual(customerCollectionDetail.getDue());
+			
 		}
 
 		return customerCollectionDetail;
@@ -114,4 +161,40 @@ public class CustomerCollectionServiceImpl implements CustomerCollectionService 
 		return monthlyFee;
 	}
 
+	@Override
+	public PaymentReceipt generatePayementReceipt(long collectionId) {
+		CustomerCollectionDetail customerCollectionDetail = customerCollectionDao.findByCollectionId(collectionId);
+		PaymentReceipt paymentReceipt = new PaymentReceipt();
+		paymentReceipt.setCollectionId(customerCollectionDetail.getCollectionId());
+		paymentReceipt.setCollectorId(customerCollectionDetail.getCollectorId());
+		paymentReceipt.setCustomerId(customerCollectionDetail.getCustomerId());
+		int calenderMonth = CommonUtils.getCurrentMonth() - 1;
+		if (calenderMonth == Calendar.JANUARY) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getJanFee());
+		} else if (calenderMonth == Calendar.FEBRUARY) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getFebFee());
+		} else if (calenderMonth == Calendar.MARCH) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getMarFee());
+		} else if (calenderMonth == Calendar.APRIL) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getAprFee());
+		} else if (calenderMonth == Calendar.MAY) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getMayFee());
+		} else if (calenderMonth == Calendar.JUNE) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getJunFee());
+		} else if (calenderMonth == Calendar.JULY) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getJulFee());
+		} else if (calenderMonth == Calendar.AUGUST) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getAugFee());
+		} else if (calenderMonth == Calendar.SEPTEMBER) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getSepFee());
+		} else if (calenderMonth == Calendar.OCTOBER) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getOctFee());
+		} else if (calenderMonth == Calendar.NOVEMBER) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getNovFee());
+		} else if (calenderMonth == Calendar.DECEMBER) {
+			paymentReceipt.setPaidAmount(customerCollectionDetail.getDecFee());
+		}
+		return paymentReceipt;
+	}
+	
 }

@@ -70,18 +70,18 @@
 						<td th:text="${customerCollectionDetail.telephone}"></td>
 						<td th:text="${customerCollectionDetail.leftTravel}"></td>
 						<td th:text="${customerCollectionDetail.note}"></td>
-						<td th:text="${customerCollectionDetail.janFee != 0} ? ${customerCollectionDetail.janFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.febFee != 0} ? ${customerCollectionDetail.febFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.marFee != 0} ? ${customerCollectionDetail.marFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.aprFee != 0} ? ${customerCollectionDetail.aprFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.mayFee != 0} ? ${customerCollectionDetail.mayFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.junFee != 0} ? ${customerCollectionDetail.junFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.julFee != 0} ? ${customerCollectionDetail.julFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.augFee != 0} ? ${customerCollectionDetail.augFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.sepFee != 0} ? ${customerCollectionDetail.sepFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.octFee != 0} ? ${customerCollectionDetail.octFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.novFee != 0} ? ${customerCollectionDetail.novFee} : '-'"></td>
-						<td th:text="${customerCollectionDetail.decFee != 0} ? ${customerCollectionDetail.decFee} : '-'"></td>
+						<td th:text="${customerCollectionDetail.janFee}"></td>
+						<td th:text="${customerCollectionDetail.febFee}"></td>
+						<td th:text="${customerCollectionDetail.marFee}"></td>
+						<td th:text="${customerCollectionDetail.aprFee}"></td>
+						<td th:text="${customerCollectionDetail.mayFee}"></td>
+						<td th:text="${customerCollectionDetail.junFee}"></td>
+						<td th:text="${customerCollectionDetail.julFee}"></td>
+						<td th:text="${customerCollectionDetail.augFee}"></td>
+						<td th:text="${customerCollectionDetail.sepFee}"></td>
+						<td th:text="${customerCollectionDetail.octFee}"></td>
+						<td th:text="${customerCollectionDetail.novFee}"></td>
+						<td th:text="${customerCollectionDetail.decFee}"></td>
 						<td>
 							<a th:href="@{|/collection/view/assignment/${customerCollectionDetail.collectionId}|}" class="w3-button w3-green">Collect</a>
 						</td>

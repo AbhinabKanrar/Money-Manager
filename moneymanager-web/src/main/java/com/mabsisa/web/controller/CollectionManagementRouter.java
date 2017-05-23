@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
+import com.mabsisa.common.model.PaymentReceipt;
 import com.mabsisa.common.model.User;
 import com.mabsisa.common.util.CommonUtils;
 import com.mabsisa.service.customer.CustomerCollectionService;
 import com.mabsisa.service.user.UserService;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 
 /**
  * @author abhinab
@@ -47,9 +50,6 @@ public class CollectionManagementRouter {
 		List<CustomerCollectionDetail> customerCollectionDetails = new ArrayList<CustomerCollectionDetail>();
 		try {
 			customerCollectionDetails = customerCollectionService.findAll();
-			System.out.println(customerCollectionDetails.get(0).getJanFee());
-			System.out.println(customerCollectionDetails.get(0).getFebFee());
-			System.out.println(customerCollectionDetails.get(0).getMarFee());
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
@@ -95,6 +95,7 @@ public class CollectionManagementRouter {
 		CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
 		try {
 			customerCollectionDetail = customerCollectionService.findCollectionByCollectionId(Long.valueOf(collectionId));
+			model.addAttribute("status", 0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
@@ -104,6 +105,21 @@ public class CollectionManagementRouter {
 		return "collectionmanagement/addupdatecollection";
 	}
 
+	@GetMapping("/print/{collectionId}")
+	public String print(@PathVariable("collectionId") String collectionId, Model model) {
+		CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
+		PaymentReceipt paymentReceipt = new PaymentReceipt();
+		try {
+			paymentReceipt = customerCollectionService.generatePayementReceipt(Long.valueOf(collectionId));
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("paymentReceipt", paymentReceipt);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/receipt";
+	}
+	
 	@PostMapping(value = "/addupdate", params = "action=update")
 	public String update(@ModelAttribute("customerCollectionDetail") CustomerCollectionDetail customerCollectionDetail,
 			Model model) {
@@ -128,6 +144,27 @@ public class CollectionManagementRouter {
 		model.addAttribute("customerCollectionDetail", customerCollectionDetail);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "collectionmanagement/addupdatecustomercollectionDetail";
+	}
+	
+	@PostMapping(value = "/addupdate", params = "action=collect")
+	public String collect(@ModelAttribute("customerCollectionDetail") CustomerCollectionDetail customerCollectionDetail,
+			Model model) {
+		if (!isValid(customerCollectionDetail)) {
+			model.addAttribute("errMessage", "Invalid data detected");
+			model.addAttribute("customerCollectionDetail", customerCollectionDetail);
+			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+			return "collectionmanagement/addupdatecollection";
+		}
+		try {
+			customerCollectionDetail = customerCollectionService.collect(customerCollectionDetail);
+			model.addAttribute("status", 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Can't update customer at this moment");
+		}
+		model.addAttribute("customerCollectionDetail", customerCollectionDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/addupdatecollection";
 	}
 
 	private boolean isValid(CustomerCollectionDetail customerCollectionDetail) {

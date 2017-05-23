@@ -7,9 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,6 +43,12 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcNTemplate;
 
+	private static final String INSERT_SQL = "INSERT INTO mm.customer_collection_detail_audit ("
+			+ "audit_id,customer_id,collector_id,location,reason,collection_ts"
+			+ ") VALUES ("
+			+ ":audit_id,:customer_id,:collector_id,:location,:reason,now()"
+			+ ")"; 
+	
 	private static final String RETRIEVE_SQL = "SELECT collection.collection_id,cust.customer_id,collection.collector_id,"
 			+ "cust.region,cust.building,cust.address,cust.client,cust.name,cust.floor,cust.fee,cust.mahal,cust.telephone,"
 			+ "cust.left_travel,cust.note,collection.jan_fee,collection.feb_fee,collection.mar_fee,collection.apr_fee,"
@@ -113,6 +121,90 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 
 		jdbcTemplate.query(psc, rowHandler);
 		
+		return customerCollectionDetail;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public CustomerCollectionDetail update(CustomerCollectionDetail customerCollectionDetail, int month) {
+		PreparedStatementCreatorFactory queryFactory = new PreparedStatementCreatorFactory(UPDATE_SQL,
+				Arrays.asList(new SqlParameter(Types.BIGINT)));
+		queryFactory.setUpdatableResults(true);
+		queryFactory.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+		PreparedStatementCreator psc = queryFactory
+				.newPreparedStatementCreator(new Object[] { customerCollectionDetail.getCollectionId() });
+		final CustomerCollectionDetail oldCustomerCollectionDetail = new CustomerCollectionDetail();
+		RowCallbackHandler rowHandler = new RowCallbackHandler() {
+
+			@Override
+			public void processRow(ResultSet rs) throws SQLException {
+				oldCustomerCollectionDetail.setCollectionId(rs.getLong("collection_id"));
+				oldCustomerCollectionDetail.setCustomerId(rs.getLong("customer_id"));
+				oldCustomerCollectionDetail.setCollectorId(rs.getLong("collector_id"));
+				oldCustomerCollectionDetail.setJanFee(rs.getBigDecimal("jan_fee"));
+				oldCustomerCollectionDetail.setFebFee(rs.getBigDecimal("feb_fee"));
+				oldCustomerCollectionDetail.setMarFee(rs.getBigDecimal("mar_fee"));
+				oldCustomerCollectionDetail.setAprFee(rs.getBigDecimal("apr_fee"));
+				oldCustomerCollectionDetail.setMayFee(rs.getBigDecimal("may_fee"));
+				oldCustomerCollectionDetail.setJunFee(rs.getBigDecimal("jun_fee"));
+				oldCustomerCollectionDetail.setJulFee(rs.getBigDecimal("jul_fee"));
+				oldCustomerCollectionDetail.setAugFee(rs.getBigDecimal("aug_fee"));
+				oldCustomerCollectionDetail.setSepFee(rs.getBigDecimal("sep_fee"));
+				oldCustomerCollectionDetail.setOctFee(rs.getBigDecimal("oct_fee"));
+				oldCustomerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
+				oldCustomerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
+
+				if (month == Calendar.JANUARY) {
+					rs.updateBigDecimal("jan_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.FEBRUARY) {
+					rs.updateBigDecimal("feb_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.MARCH) {
+					rs.updateBigDecimal("mar_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.APRIL) {
+					rs.updateBigDecimal("apr_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.MAY) {
+					rs.updateBigDecimal("may_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.JUNE) {
+					rs.updateBigDecimal("jun_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.JULY) {
+					rs.updateBigDecimal("jul_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.AUGUST) {
+					rs.updateBigDecimal("aug_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.SEPTEMBER) {
+					rs.updateBigDecimal("sep_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.OCTOBER) {
+					rs.updateBigDecimal("oct_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.NOVEMBER) {
+					rs.updateBigDecimal("nov_fee", customerCollectionDetail.getActual());
+				} else if (month == Calendar.DECEMBER) {
+					rs.updateBigDecimal("dec_fee", customerCollectionDetail.getActual());
+				}
+				
+				rs.updateRow();
+			}
+		};
+
+		jdbcTemplate.query(psc, rowHandler);
+		
+		if (customerCollectionDetail.getDue().compareTo(customerCollectionDetail.getActual()) > 0 && customerCollectionDetail.getReasonCode() != null && !customerCollectionDetail.getReasonCode().trim().isEmpty()) {
+			updateAudit(customerCollectionDetail);
+		}
+		
+		return customerCollectionDetail;
+	}
+	
+	private CustomerCollectionDetail updateAudit(CustomerCollectionDetail customerCollectionDetail) {
+
+		Map<String, Object> params = new HashMap<>(5);
+
+		params.put("audit_id", UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+		params.put("customer_id", customerCollectionDetail.getCustomerId());
+		params.put("collector_id", customerCollectionDetail.getCollectorId());
+		params.put("location", customerCollectionDetail.getLocation());
+		params.put("reason", customerCollectionDetail.getReasonCode());
+
+		jdbcNTemplate.update(INSERT_SQL, params);
+
 		return customerCollectionDetail;
 	}
 	

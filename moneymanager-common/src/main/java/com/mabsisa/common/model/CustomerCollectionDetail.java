@@ -41,6 +41,9 @@ public class CustomerCollectionDetail implements Serializable {
 	private BigDecimal novFee;
 	private BigDecimal decFee;
 	private BigDecimal due;
+	private BigDecimal actual;
+	private String reasonCode = " ";
+	private String location;
 
 	public Long getCollectionId() {
 		return collectionId;
@@ -203,6 +206,24 @@ public class CustomerCollectionDetail implements Serializable {
 	}
 	public void setDue(BigDecimal due) {
 		this.due = due;
+	}
+	public BigDecimal getActual() {
+		return actual;
+	}
+	public void setActual(BigDecimal actual) {
+		this.actual = actual;
+	}
+	public String getReasonCode() {
+		return reasonCode;
+	}
+	public void setReasonCode(String reasonCode) {
+		this.reasonCode = reasonCode;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 }

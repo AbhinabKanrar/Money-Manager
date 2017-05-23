@@ -22,6 +22,9 @@ public interface CustomerCollectionDao {
 	CustomerCollectionDetail update(CustomerCollectionDetail customerCollectionDetail);
 	
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	CustomerCollectionDetail update(CustomerCollectionDetail customerCollectionDetail, int month);
+	
+	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	List<CustomerCollectionDetail> findAll();
 	
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head th:include="fragments/header"/>
+<style type="text/css">
+html {
+	background-color : white
+}
+</style>
+<body>
+	<div class="w3-container">
+		<p>
+			<div class="w3-left w3-large">
+				Bill # <span th:text="${paymentReceipt.collectionId}"></span>
+			</div>
+			<span class="w3-right"><a href="#" id="printer">Print</a></span>
+		</p>
+		<br/>
+		<p>
+			<div class="w3-center w3-xlarge">
+				Payment Receipt
+			</div>
+		</p>
+		<p>
+			<div class="w3-center w3-large">
+				Money Manager
+			</div>
+		</p>
+		<p>
+			<div class="w3-center w3-medium">
+				Ph. 1234567890
+			</div>
+		</p>
+		<p>
+			<div class="w3-small w3-topbar w3-bottombar">
+				Time : <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+			</div>
+		</p>
+		<p>
+			<div class="w3-small">
+				<span class="w3-left">Description</span>
+				<span class="w3-right">Amount</span>
+			</div>
+		</p>
+		<br/>
+		<p>
+			<div class="w3-medium">
+				<span class="w3-left">Paid Amount for the Month of &nbsp;</span><span class="w3-left" th:text="${#dates.format(#dates.createNow(), 'MMM')}"></span>
+				<span class="w3-right" th:text="${paymentReceipt.paidAmount}"></span>
+			</div>
+		</p>
+		<br/>
+		<p>
+			<div class="w3-medium w3-topbar">
+				<span class="w3-right" th:text="${paymentReceipt.collectorId}"></span>
+				<span class="w3-right">Collected By : &nbsp;</span>
+			</div>
+		</p>
+		<br/><br/><br/>
+		<br/>
+			<div class="w3-medium">
+				<span class="w3-right">Signature</span>
+			</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script>
+	$(document).ready(
+			function() {
+				$("#printer").click(function() {
+					window.print();
+				});
+			});
+	</script>
+</body>
+</html>
