@@ -1,1 +1,1 @@
-web: java -jar MoneyManager-Web/target/MoneyManager-Web.war
+web: java -jar moneymanager-web/target/moneymanager-web.war
