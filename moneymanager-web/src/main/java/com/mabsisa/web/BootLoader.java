@@ -39,7 +39,7 @@ public class BootLoader implements CommandLineRunner {
 		User user = new User();
 		user.setUserId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
 		user.setUsername("admin");
-		user.setPassword("$2a$10$trT3.R/Nfey62eczbKEnueTcIbJXW.u1ffAo/XfyLpofwNDbEB86O");
+		user.setPassword("123456");
 		user.setRole(Role.ADMIN);
 		user.setMail("abhinabkanrar@gmail.com");
 		user.setPhoneNumber("+919836334099");
