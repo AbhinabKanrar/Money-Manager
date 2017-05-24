@@ -49,9 +49,6 @@ public class BootLoader implements CommandLineRunner {
 		} catch(Exception e) {}
 	}
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		SpringApplication.run(BootLoader.class, args);
 	}

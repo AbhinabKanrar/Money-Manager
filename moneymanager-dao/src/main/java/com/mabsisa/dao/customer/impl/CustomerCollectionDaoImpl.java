@@ -69,6 +69,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "where collection.collection_id = :collection_id";
 	
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
+	private static final String BATCH_UPDATE_SQL = "update mm.customer_collection_detail set collector_id=:collector_id where customer_id=:customer_id";
 
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
@@ -124,6 +125,29 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		return customerCollectionDetail;
 	}
 
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public List<CustomerCollectionDetail> update(List<CustomerCollectionDetail> customerCollectionDetails) {
+		int counter = 0;
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object>[] params = new Map[customerCollectionDetails.size()];
+		
+		for(CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+			Map<String, Object> param = new HashMap<>(2);
+			param.put("customer_id", customerCollectionDetail.getCustomerId());
+			param.put("collector_id", customerCollectionDetail.getCollectorId());
+			
+			params[counter] = param;
+			counter++;
+		}
+		
+		jdbcNTemplate.batchUpdate(BATCH_UPDATE_SQL, params);
+		
+		return customerCollectionDetails;
+	}
+
+	
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public CustomerCollectionDetail update(CustomerCollectionDetail customerCollectionDetail, int month) {

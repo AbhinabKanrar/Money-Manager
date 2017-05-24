@@ -19,14 +19,13 @@
 			<i class="fa fa-users fa-fw"></i> Customer Assignment
 		</div>
 		<div class="w3-input w3-large">
-			<b>Bulk CUstomer Mapping</b>
+			<b>Bulk Customer Mapping</b>
 		</div>
 		<p class="success" th:text="${successMessage}"></p>
 		<p class="error" th:text="${errMessage}"></p>
-		<div class="w3-container">
+		<div th:if="${status} != 1 and ${status} != 2 and ${status} != 3 and ${confirmation} != 1 and ${error} != 1" class="w3-container">
 			<form action="/assignment/search" method="post">
-				<input type="hidden" th:name="${_csrf.parameterName}"
-					th:value="${_csrf.token}" />
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 				<p>
 					<label>Collector : </label>
 					 <select name="collectorId">
@@ -43,6 +42,86 @@
 					</button> 
 				</p>
 			</form>
+		</div>
+		<div class="w3-container">
+			<p th:if="${status} == 1">
+				<form action="/assignment/assign/region" method="post">
+					<input type="hidden" th:value="${collectorId}" name="collectorId" required="required"/>
+					<table>
+						<tr>
+							<td>Collector ID : </td>
+							<td th:text="${collectorId}"></td>
+						</tr>
+						<tr>
+							<td>Choose Region : </td>
+							<td>
+								<select multiple="multiple" name="regions">
+									<option th:each="region : ${regions}" th:value="${region}" th:text="${region}"></option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<br/>
+					<button class="w3-button w3-theme" type="submit">
+						<i class="w3-large fa fa-tasks">&nbsp;&nbsp;Assign</i>
+					</button>
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				</form>
+			</p>
+			<p th:if="${status} == 2">
+				<form action="/assignment/assign/building" method="post">
+					<input type="hidden" th:value="${collectorId}" name="collectorId" required="required"/>
+					<table>
+						<tr>
+							<td>Collector ID : </td>
+							<td th:text="${collectorId}"></td>
+						</tr>
+						<tr>
+							<td>Choose Building : </td>
+							<td>
+								<select multiple="multiple" name="buildingRegions">
+									<option th:each="buildingRegion : ${buildingRegions}" th:value="${buildingRegion.key} + ',' + ${buildingRegion.value}" th:text="'Building : ' + ${buildingRegion.key} +', Region : ' + ${buildingRegion.value}"></option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<br/>
+					<button class="w3-button w3-theme" type="submit">
+						<i class="w3-large fa fa-tasks">&nbsp;&nbsp;Assign</i>
+					</button>
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				</form>
+			</p>
+			<p th:if="${status} == 3">
+				<form action="/assignment/assign/customer" method="post">
+					<input type="hidden" th:value="${collectorId}" name="collectorId" required="required"/>
+					<table>
+						<tr>
+							<td>Collector ID : </td>
+							<td th:text="${collectorId}"></td>
+						</tr>
+						<tr>
+							<td>Choose Customer : </td>
+							<td>
+								<select multiple="multiple" name="customers">
+									<option th:each="customer : ${customers}" th:value="${customer.customerId}" th:text="'Name : ' + ${customer.name} + ',Building : ' + ${customer.building} + ', Region: ' + ${customer.region}"></option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<br/>
+					<button class="w3-button w3-theme" type="submit">
+						<i class="w3-large fa fa-tasks">&nbsp;&nbsp;Assign</i>
+					</button>
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				</form>
+			</p>
+			<p th:if="${confirmation} == 1">
+				Assignment recorded. Please <a href="/assignment/search">click here</a> to create new assignment 
+			</p>
+			<p th:if="${error} == 1 and ${confirmation} != 1">
+				Assignment can't be recorded at this moment. Please <a href="/assignment/search">click here</a> to create new assignment 
+			</p>
 		</div>
 	</div>
 	<script src="/js/lib/jquery.min.js"></script>
