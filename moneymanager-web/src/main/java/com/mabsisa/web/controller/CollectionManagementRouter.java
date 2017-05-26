@@ -6,6 +6,7 @@ package com.mabsisa.web.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
 import com.mabsisa.common.model.PaymentReceipt;
+import com.mabsisa.common.model.Role;
 import com.mabsisa.common.model.User;
 import com.mabsisa.common.util.CommonUtils;
 import com.mabsisa.service.customer.CustomerCollectionService;
 import com.mabsisa.service.user.UserService;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 /**
  * @author abhinab
@@ -65,7 +66,7 @@ public class CollectionManagementRouter {
 		List<User> users = new ArrayList<User>();
 		try {
 			customerCollectionDetail = customerCollectionService.findByCollectionId(Long.valueOf(collectionId));
-			users = userService.findAll();
+			users = userService.findAll().stream().filter(user -> user.getRole() == Role.COLLECTOR).collect(Collectors.toList());
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
@@ -107,7 +108,6 @@ public class CollectionManagementRouter {
 
 	@GetMapping("/print/{collectionId}")
 	public String print(@PathVariable("collectionId") String collectionId, Model model) {
-		CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
 		PaymentReceipt paymentReceipt = new PaymentReceipt();
 		try {
 			paymentReceipt = customerCollectionService.generatePayementReceipt(Long.valueOf(collectionId));

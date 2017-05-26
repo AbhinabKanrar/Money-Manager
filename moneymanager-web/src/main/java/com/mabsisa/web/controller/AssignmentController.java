@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mabsisa.common.model.Customer;
+import com.mabsisa.common.model.Role;
 import com.mabsisa.common.model.SearchParam;
 import com.mabsisa.common.model.User;
 import com.mabsisa.common.util.CommonUtils;
@@ -63,7 +65,7 @@ public class AssignmentController {
 	public String search(Model model) {
 		List<User> users = new ArrayList<User>();
 		try {
-			users = userService.findAll();
+			users = userService.findAll().stream().filter(user -> user.getRole() == Role.COLLECTOR).collect(Collectors.toList());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,6 +79,7 @@ public class AssignmentController {
 	public String seachResult(HttpServletRequest request, Model model) {
 		long collectorId = 0;
 		List<Customer> customers = new ArrayList<Customer>();
+		List<User> users = new ArrayList<User>();
 		try {
 			collectorId = ServletRequestUtils.getLongParameter(request, "collectorId");
 			String searchParam = ServletRequestUtils.getStringParameter(request, "searchParam");
@@ -109,10 +112,14 @@ public class AssignmentController {
 					model.addAttribute("customers", customers);
 					model.addAttribute("status", 3);
 				}
+			} else {
+				model.addAttribute("errMessage", "No customer data found");
 			}
+			users = userService.findAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		model.addAttribute("users", users);
 		model.addAttribute("collectorId", collectorId);
 		model.addAttribute("searchParams", searchParams);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());

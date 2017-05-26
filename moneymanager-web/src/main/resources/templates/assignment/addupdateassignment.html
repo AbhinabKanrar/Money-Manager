@@ -29,7 +29,7 @@
 				<p>
 					<label>Collector : </label>
 					 <select name="collectorId">
-						<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.userId} + ' (' + ${user.username} + ')'"></option>
+						<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
 					</select>
 				</p>
 				<p>				

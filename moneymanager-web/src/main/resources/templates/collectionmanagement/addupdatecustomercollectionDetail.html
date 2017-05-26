@@ -84,7 +84,7 @@
 							<td th:text="${customerCollectionDetail.customerId}"></td>
 							<td>
 								<select th:field="*{collectorId}" required="required">
-									<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.userId} + '  (' + ${user.username} + ')'"></option>
+									<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
 								</select>
 							</td>
 							<td th:text="${customerCollectionDetail.region}"></td>
