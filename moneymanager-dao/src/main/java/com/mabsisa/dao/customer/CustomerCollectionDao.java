@@ -10,6 +10,7 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
+import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.common.util.CommonConstant;
 
 /**
@@ -29,6 +30,9 @@ public interface CustomerCollectionDao {
 	
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	List<CustomerCollectionDetail> findAll();
+	
+	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	List<CustomerCollectionDetailAudit> findAllCustomerCollectionDetailAudit();
 	
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	CustomerCollectionDetail findByCollectionId(long collectionId);

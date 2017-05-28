@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head th:include="fragments/header"></head>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header"
+		th:include="fragments/top" />
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar">
+		<br />
+		<hr />
+		<div class="w3-container">
+			<h5>Dashboard</h5>
+		</div>
+		<div class="w3-bar-block" th:include="fragments/menu" />
+	</nav>
+	<div
+		class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close"
+		title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Reports
+		</div>
+		<div class="w3-input w3-large">
+			<b>Assignment Records</b>
+		</div>
+		<br/>
+		<p class="error" th:text="${errMessage}"></p>
+		<div class="w3-responsive w3-white">
+			<table>
+				<tbody>
+					<tr>
+						<td>Total Number of Customer</td>
+						<td th:text="${TOTAL_CUSTOMER}"></td>
+					</tr>
+					<tr>
+						<td>Total Number of Assigned Customer</td>
+						<td th:text="${TOTAL_ASSIGNED_CUSTOMER}"></td>
+					</tr>
+					<tr>
+						<td>Total Number of Unassigned Customer</td>
+						<td th:text="${TOTAL_UNASSIGNED_CUSTOMER}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<a href="/collection/view" >View Customer Collection Mapping</a>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/lib/dataTables.responsive.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

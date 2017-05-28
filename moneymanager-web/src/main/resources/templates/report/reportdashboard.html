@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head th:include="fragments/header"></head>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header"
+		th:include="fragments/top" />
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar">
+		<br />
+		<hr />
+		<div class="w3-container">
+			<h5>Dashboard</h5>
+		</div>
+		<div class="w3-bar-block" th:include="fragments/menu" />
+	</nav>
+	<div
+		class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close"
+		title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Reports
+		</div>
+		<div class="w3-input w3-large">
+			<b>Report DashBoard</b>
+		</div>
+		<br/>
+		<div class="w3-responsive">
+			<div class="w3-row-padding w3-margin-bottom">
+				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}"
+					class="w3-quarter">
+					<a href="/report/trackassignment">
+						<div class="w3-container w3-orange w3-padding-16">
+							<div class="w3-left">
+								<i class="fa fa-share-alt w3-xxxlarge"></i>
+							</div>
+							<div class="w3-right">
+								<h3><i class="fa fa-bandcamp w3-xxxlarge"></i></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Track Assignment</h4>
+						</div>
+					</a>
+				</div>
+				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}"
+					class="w3-quarter">
+					<a href="/report/collectionmismatchlocationtracking">
+						<div class="w3-container w3-teal w3-padding-16">
+							<div class="w3-left">
+								<i class="fa fa-eye w3-xxxlarge"></i>
+							</div>
+							<div class="w3-right">
+								<h3><i class="fa fa-binoculars w3-xxxlarge"></i></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Collection Mismatch Location Tracking</h4>
+						</div>
+					</a>
+				</div>
+				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}"
+					class="w3-quarter">
+					<a href="/assignment/search">
+						<div class="w3-container w3-green w3-padding-16">
+							<div class="w3-left">
+								<i class="fa fa-share-alt w3-xxxlarge"></i>
+							</div>
+							<div class="w3-right">
+								<h3><i class="fa fa-bandcamp w3-xxxlarge"></i></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Bulk Customer Assignment</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/lib/dataTables.responsive.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

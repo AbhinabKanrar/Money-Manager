@@ -102,7 +102,23 @@
 			<p>
 				<div th:if="${status} == 0" class="w3-row-padding">
 					<div class="w3-half">
-						<label>Due Amount</label>
+						<label>Current Month Fee</label>
+					</div>
+					<div class="w3-half">
+						<input  type="text" id="dueAmount" th:field="*{fee}" disabled="disabled"/>
+					</div>
+				</div>
+				<div th:if="${status} == 0" class="w3-row-padding">
+					<div class="w3-half">
+						<label>Due Amount Till Date</label>
+					</div>
+					<div class="w3-half">
+						<input  type="text" id="dueAmount" th:value="*{due - fee}" disabled="disabled"/>
+					</div>
+				</div>
+				<div th:if="${status} == 0" class="w3-row-padding">
+					<div class="w3-half">
+						<label>Total Due Amount</label>
 					</div>
 					<div class="w3-half">
 						<input  type="text" id="dueAmount" th:field="*{due}" disabled="disabled"/>

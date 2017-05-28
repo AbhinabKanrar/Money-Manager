@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
+import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.dao.customer.CustomerCollectionDao;
 
 /**
@@ -39,22 +40,19 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
+
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcNTemplate;
 
 	private static final String INSERT_SQL = "INSERT INTO mm.customer_collection_detail_audit ("
-			+ "audit_id,customer_id,collector_id,location,reason,collection_ts"
-			+ ") VALUES ("
-			+ ":audit_id,:customer_id,:collector_id,:location,:reason,now()"
-			+ ")"; 
-	
+			+ "audit_id,customer_id,collector_id,location,reason,collection_ts" + ") VALUES ("
+			+ ":audit_id,:customer_id,:collector_id,:location,:reason,now()" + ")";
+
 	private static final String RETRIEVE_SQL = "SELECT collection.collection_id,cust.customer_id,collection.collector_id,"
 			+ "cust.region,cust.building,cust.address,cust.client,cust.name,cust.floor,cust.fee,cust.mahal,cust.telephone,"
 			+ "cust.left_travel,cust.note,collection.jan_fee,collection.feb_fee,collection.mar_fee,collection.apr_fee,"
 			+ "collection.may_fee,collection.jun_fee,collection.jul_fee,collection.aug_fee,collection.sep_fee,"
-			+ "collection.oct_fee,collection.nov_fee,collection.dec_fee "
-			+ "FROM "
+			+ "collection.oct_fee,collection.nov_fee,collection.dec_fee " + "FROM "
 			+ "mm.customer_detail cust join mm.customer_collection_detail collection "
 			+ "on cust.customer_id=collection.customer_id";
 
@@ -62,12 +60,12 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "cust.region,cust.building,cust.address,cust.client,cust.name,cust.floor,cust.fee,cust.mahal,cust.telephone,"
 			+ "cust.left_travel,cust.note,collection.jan_fee,collection.feb_fee,collection.mar_fee,collection.apr_fee,"
 			+ "collection.may_fee,collection.jun_fee,collection.jul_fee,collection.aug_fee,collection.sep_fee,"
-			+ "collection.oct_fee,collection.nov_fee,collection.dec_fee "
-			+ "FROM "
+			+ "collection.oct_fee,collection.nov_fee,collection.dec_fee " + "FROM "
 			+ "mm.customer_detail cust join mm.customer_collection_detail collection "
-			+ "on cust.customer_id=collection.customer_id "
-			+ "where collection.collection_id = :collection_id";
-	
+			+ "on cust.customer_id=collection.customer_id " + "where collection.collection_id = :collection_id";
+
+	private static final String RETRIEVE_AUDIT_SQL = "SELECT * FROM mm.customer_collection_detail_audit";
+
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
 	private static final String BATCH_UPDATE_SQL = "update mm.customer_collection_detail set collector_id=:collector_id where customer_id=:customer_id";
 
@@ -121,7 +119,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		};
 
 		jdbcTemplate.query(psc, rowHandler);
-		
+
 		return customerCollectionDetail;
 	}
 
@@ -132,22 +130,21 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object>[] params = new Map[customerCollectionDetails.size()];
-		
-		for(CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+
+		for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
 			Map<String, Object> param = new HashMap<>(2);
 			param.put("customer_id", customerCollectionDetail.getCustomerId());
 			param.put("collector_id", customerCollectionDetail.getCollectorId());
-			
+
 			params[counter] = param;
 			counter++;
 		}
-		
+
 		jdbcNTemplate.batchUpdate(BATCH_UPDATE_SQL, params);
-		
+
 		return customerCollectionDetails;
 	}
 
-	
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public CustomerCollectionDetail update(CustomerCollectionDetail customerCollectionDetail, int month) {
@@ -203,20 +200,22 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 				} else if (month == Calendar.DECEMBER) {
 					rs.updateBigDecimal("dec_fee", customerCollectionDetail.getActual());
 				}
-				
+
 				rs.updateRow();
 			}
 		};
 
 		jdbcTemplate.query(psc, rowHandler);
-		
-		if (customerCollectionDetail.getDue().compareTo(customerCollectionDetail.getActual()) > 0 && customerCollectionDetail.getReasonCode() != null && !customerCollectionDetail.getReasonCode().trim().isEmpty()) {
+
+		if (customerCollectionDetail.getDue().compareTo(customerCollectionDetail.getActual()) > 0
+				&& customerCollectionDetail.getReasonCode() != null
+				&& !customerCollectionDetail.getReasonCode().trim().isEmpty()) {
 			updateAudit(customerCollectionDetail);
 		}
-		
+
 		return customerCollectionDetail;
 	}
-	
+
 	private CustomerCollectionDetail updateAudit(CustomerCollectionDetail customerCollectionDetail) {
 
 		Map<String, Object> params = new HashMap<>(5);
@@ -231,7 +230,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 
 		return customerCollectionDetail;
 	}
-	
+
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
 	public List<CustomerCollectionDetail> findAll() {
@@ -268,7 +267,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 						customerCollectionDetail.setOctFee(rs.getBigDecimal("oct_fee"));
 						customerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
 						customerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
-		
+
 						return customerCollectionDetail;
 					}
 
@@ -286,42 +285,72 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 	public CustomerCollectionDetail findByCollectionId(long collectionId) {
 		Map<String, Object> param = new HashMap<>(1);
 		param.put("collection_id", collectionId);
-		CustomerCollectionDetail customerCollectionDetail = jdbcNTemplate.queryForObject(RETRIEVE_SQL_BY_ID, param, new RowMapper<CustomerCollectionDetail>() {
-			@Override
-			public CustomerCollectionDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
-				CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
-				
-				customerCollectionDetail.setCollectionId(rs.getLong("collection_id"));
-				customerCollectionDetail.setCustomerId(rs.getLong("customer_id"));
-				customerCollectionDetail.setCollectorId(rs.getLong("collector_id"));
-				customerCollectionDetail.setRegion(rs.getString("region"));
-				customerCollectionDetail.setBuilding(rs.getString("building"));
-				customerCollectionDetail.setAddress(rs.getString("address"));
-				customerCollectionDetail.setClient(rs.getString("client"));
-				customerCollectionDetail.setName(rs.getString("name"));
-				customerCollectionDetail.setFloor(rs.getString("floor"));
-				customerCollectionDetail.setFee(rs.getBigDecimal("fee"));
-				customerCollectionDetail.setMahal(rs.getString("mahal"));
-				customerCollectionDetail.setTelephone(rs.getString("telephone"));
-				customerCollectionDetail.setLeftTravel(rs.getString("left_travel"));
-				customerCollectionDetail.setNote(rs.getString("note"));
-				customerCollectionDetail.setJanFee(rs.getBigDecimal("jan_fee"));
-				customerCollectionDetail.setFebFee(rs.getBigDecimal("feb_fee"));
-				customerCollectionDetail.setMarFee(rs.getBigDecimal("mar_fee"));
-				customerCollectionDetail.setAprFee(rs.getBigDecimal("apr_fee"));
-				customerCollectionDetail.setMayFee(rs.getBigDecimal("may_fee"));
-				customerCollectionDetail.setJunFee(rs.getBigDecimal("jun_fee"));
-				customerCollectionDetail.setJulFee(rs.getBigDecimal("jul_fee"));
-				customerCollectionDetail.setAugFee(rs.getBigDecimal("aug_fee"));
-				customerCollectionDetail.setSepFee(rs.getBigDecimal("sep_fee"));
-				customerCollectionDetail.setOctFee(rs.getBigDecimal("oct_fee"));
-				customerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
-				customerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
-				
-				return customerCollectionDetail;
-			}
-		});
+		CustomerCollectionDetail customerCollectionDetail = jdbcNTemplate.queryForObject(RETRIEVE_SQL_BY_ID, param,
+				new RowMapper<CustomerCollectionDetail>() {
+					@Override
+					public CustomerCollectionDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
+						CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
+
+						customerCollectionDetail.setCollectionId(rs.getLong("collection_id"));
+						customerCollectionDetail.setCustomerId(rs.getLong("customer_id"));
+						customerCollectionDetail.setCollectorId(rs.getLong("collector_id"));
+						customerCollectionDetail.setRegion(rs.getString("region"));
+						customerCollectionDetail.setBuilding(rs.getString("building"));
+						customerCollectionDetail.setAddress(rs.getString("address"));
+						customerCollectionDetail.setClient(rs.getString("client"));
+						customerCollectionDetail.setName(rs.getString("name"));
+						customerCollectionDetail.setFloor(rs.getString("floor"));
+						customerCollectionDetail.setFee(rs.getBigDecimal("fee"));
+						customerCollectionDetail.setMahal(rs.getString("mahal"));
+						customerCollectionDetail.setTelephone(rs.getString("telephone"));
+						customerCollectionDetail.setLeftTravel(rs.getString("left_travel"));
+						customerCollectionDetail.setNote(rs.getString("note"));
+						customerCollectionDetail.setJanFee(rs.getBigDecimal("jan_fee"));
+						customerCollectionDetail.setFebFee(rs.getBigDecimal("feb_fee"));
+						customerCollectionDetail.setMarFee(rs.getBigDecimal("mar_fee"));
+						customerCollectionDetail.setAprFee(rs.getBigDecimal("apr_fee"));
+						customerCollectionDetail.setMayFee(rs.getBigDecimal("may_fee"));
+						customerCollectionDetail.setJunFee(rs.getBigDecimal("jun_fee"));
+						customerCollectionDetail.setJulFee(rs.getBigDecimal("jul_fee"));
+						customerCollectionDetail.setAugFee(rs.getBigDecimal("aug_fee"));
+						customerCollectionDetail.setSepFee(rs.getBigDecimal("sep_fee"));
+						customerCollectionDetail.setOctFee(rs.getBigDecimal("oct_fee"));
+						customerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
+						customerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
+
+						return customerCollectionDetail;
+					}
+				});
 		return customerCollectionDetail;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+	public List<CustomerCollectionDetailAudit> findAllCustomerCollectionDetailAudit() {
+		List<CustomerCollectionDetailAudit> customerCollectionDetailAudits = jdbcTemplate.query(RETRIEVE_AUDIT_SQL,
+				new RowMapper<CustomerCollectionDetailAudit>() {
+
+					@Override
+					public CustomerCollectionDetailAudit mapRow(ResultSet rs, int rowNum) throws SQLException {
+						final CustomerCollectionDetailAudit customerCollectionDetailAudit = new CustomerCollectionDetailAudit();
+
+						customerCollectionDetailAudit.setAuditId(rs.getLong("audit_id"));
+						customerCollectionDetailAudit.setCustomerId(rs.getLong("customer_id"));
+						customerCollectionDetailAudit.setCollectorId(rs.getLong("collector_id"));
+						customerCollectionDetailAudit.setLocation(rs.getString("location"));
+						customerCollectionDetailAudit.setReason(rs.getString("reason"));
+						customerCollectionDetailAudit.setCollectionTs(rs.getTimestamp("collection_ts"));
+
+						return customerCollectionDetailAudit;
+					}
+
+				});
+
+		if (customerCollectionDetailAudits == null || customerCollectionDetailAudits.isEmpty()) {
+			return null;
+		}
+
+		return customerCollectionDetailAudits;
 	}
 
 }

@@ -16,15 +16,12 @@
 	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
 	<div class="w3-main" id="ui-view">
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
-			<i class="fa fa-users fa-fw"></i> Customer Management
+			<i class="fa fa-users fa-fw"></i> Reports
 		</div>
 		<div class="w3-container">
 			<div class="w3-input w3-large">
-				<b>View Customers</b>
+				<b>Collection Mismatch location Tracking</b>
 			</div>
-			<p>
-				<a href="/customer/add" class="w3-button w3-green">Add New Customer</a>
-			</p>
 		</div>
 		<p class="success" th:text="${successMessage}"></p>
 		<p class="error" th:text="${errMessage}"></p>
@@ -33,34 +30,22 @@
 				cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>Action</th>
-						<th>Name</th>
-						<th>Region</th>
-						<th>Building</th>
-						<th>Address</th>
-						<th>Client</th>
-						<th>Floor</th>
-						<th>Fee</th>
-						<th>Mahal</th>
-						<th>Telephone</th>
-						<th>Left/travel</th>
-						<th>Note</th>
+						<th>Audit ID</th>
+						<th>Customer ID</th>
+						<th>Collector ID</th>
+						<th>Location</th>
+						<th>Reason</th>
+						<th>Time</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="customer : ${customers}">
-						<td><a th:href="@{|/customer/find/${customer.customerId}|}" class="w3-button w3-green">Edit</a></td>
-						<td th:text="${customer.name}"></td>
-						<td th:text="${customer.region}"></td>
-						<td th:text="${customer.building}"></td>
-						<td th:text="${customer.address}"></td>
-						<td th:text="${customer.client}"></td>
-						<td th:text="${customer.floor}"></td>
-						<td th:text="${customer.fee}"></td>
-						<td th:text="${customer.mahal}"></td>
-						<td th:text="${customer.telephone}"></td>
-						<td th:text="${customer.leftTravel}"></td>
-						<td th:text="${customer.note}"></td>
+					<tr th:each="customerCollectionDetailAudit : ${customerCollectionDetailAudits}">
+						<td th:text="${customerCollectionDetailAudit.auditId}"></td>
+						<td><a th:href="@{|/customer/find/${customerCollectionDetailAudit.customerId}|}" th:text="|${customerCollectionDetailAudit.customerId}"></a></td>
+						<td><a th:href="@{|/user/update/${customerCollectionDetailAudit.collectorId}|}" th:text="|${customerCollectionDetailAudit.collectorId}"></a></td>
+						<td th:text="${customerCollectionDetailAudit.location}"></td>
+						<td th:text="${customerCollectionDetailAudit.reason}"></td>
+						<td th:text="${customerCollectionDetailAudit.collectionTs}"></td>
 					</tr>
 				</tbody>
 			</table>

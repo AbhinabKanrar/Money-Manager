@@ -27,13 +27,12 @@
 				cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>Customer ID</th>
-						<th>Collector ID</th>
+						<th>Action</th>
+						<th>Name</th>
 						<th>Region</th>
 						<th>Building</th>
 						<th>Address</th>
 						<th>Client</th>
-						<th>Name</th>
 						<th>Floor</th>
 						<th>Fee</th>
 						<th>Mahal</th>
@@ -52,18 +51,18 @@
 						<th>October Fee</th>
 						<th>November Fee</th>
 						<th>December Fee</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="customerCollectionDetail : ${customerCollectionDetails}">
-						<td th:text="${customerCollectionDetail.customerId}"></td>
-						<td th:text="${customerCollectionDetail.collectorId != 0} ? ${customerCollectionDetail.collectorId} : '-'"></td>
+						<td>
+							<a th:href="@{|/collection/view/assignment/${customerCollectionDetail.collectionId}|}" class="w3-button w3-green">Collect</a>
+						</td>
+						<td th:text="${customerCollectionDetail.name}"></td>
 						<td th:text="${customerCollectionDetail.region}"></td>
 						<td th:text="${customerCollectionDetail.building}"></td>
 						<td th:text="${customerCollectionDetail.address}"></td>
 						<td th:text="${customerCollectionDetail.client}"></td>
-						<td th:text="${customerCollectionDetail.name}"></td>
 						<td th:text="${customerCollectionDetail.floor}"></td>
 						<td th:text="${customerCollectionDetail.fee}"></td>
 						<td th:text="${customerCollectionDetail.mahal}"></td>
@@ -82,9 +81,6 @@
 						<td th:text="${customerCollectionDetail.octFee}"></td>
 						<td th:text="${customerCollectionDetail.novFee}"></td>
 						<td th:text="${customerCollectionDetail.decFee}"></td>
-						<td>
-							<a th:href="@{|/collection/view/assignment/${customerCollectionDetail.collectionId}|}" class="w3-button w3-green">Collect</a>
-						</td>
 					</tr>
 				</tbody>
 			</table>

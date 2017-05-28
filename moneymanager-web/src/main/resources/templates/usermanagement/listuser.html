@@ -32,24 +32,24 @@
 				cellspacing="0" width="100%">
 				<thead>
 					<tr>
+						<th>Action</th>
 						<th>User ID</th>
 						<th>Username</th>
 						<th>Role</th>
 						<th>Mail</th>
 						<th>Phone Number</th>
 						<th>User Status</th>
-						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="user : ${users}">
+						<td><a th:href="@{|/user/update/${user.userId}|}" class="w3-button w3-green">Edit</a></td>
 						<td th:text="${user.userId}"></td>
 						<td th:text="${user.username}"></td>
 						<td th:text="${user.role}"></td>
 						<td th:text="${user.mail}"></td>
 						<td th:text="${user.phoneNumber}"></td>
 						<td th:text="${user.userStatus}"></td>
-						<td><a th:href="@{|/user/update/${user.userId}|}" class="w3-button w3-green">Edit</a></td>
 					</tr>
 				</tbody>
 			</table>
