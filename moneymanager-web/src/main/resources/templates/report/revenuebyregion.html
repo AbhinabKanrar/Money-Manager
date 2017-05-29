@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head th:include="fragments/header"></head>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header"
+		th:include="fragments/top" />
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar">
+		<br />
+		<hr />
+		<div class="w3-container">
+			<h5>Dashboard</h5>
+		</div>
+		<div class="w3-bar-block" th:include="fragments/menu" />
+	</nav>
+	<div
+		class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close"
+		title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Reports
+		</div>
+		<div class="w3-input w3-large">
+			<b>Revenue Received</b>
+		</div>
+		<br/>
+		<p class="error" th:text="${errMessage}"></p>
+		<div class="w3-responsive w3-white">
+			<table class="w3-table"
+				cellspacing="0" width="100%">
+				<thead class="w3-border w3-light-blue">
+					<tr>
+						<th></th>
+						<th>Jan</th>
+						<th>Feb</th>
+						<th>Mar</th>
+						<th>Apr</th>
+						<th>May</th>
+						<th>Jun</th>
+						<th>Jul</th>
+						<th>Aug</th>
+						<th>Sep</th>
+						<th>Oct</th>
+						<th>Nov</th>
+						<th>Dec</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="revenueByRegion : ${revenueByRegions}">
+						<td th:text="${revenueByRegion.region}"></td>
+						<td th:text="${revenueByRegion.janRevenue}"></td>
+						<td th:text="${revenueByRegion.febRevenue}"></td>
+						<td th:text="${revenueByRegion.marRevenue}"></td>
+						<td th:text="${revenueByRegion.aprRevenue}"></td>
+						<td th:text="${revenueByRegion.mayRevenue}"></td>
+						<td th:text="${revenueByRegion.junRevenue}"></td>
+						<td th:text="${revenueByRegion.julRevenue}"></td>
+						<td th:text="${revenueByRegion.augRevenue}"></td>
+						<td th:text="${revenueByRegion.sepRevenue}"></td>
+						<td th:text="${revenueByRegion.octRevenue}"></td>
+						<td th:text="${revenueByRegion.novRevenue}"></td>
+						<td th:text="${revenueByRegion.decRevenue}"></td>
+					</tr>
+					<tr class="w3-border">
+						<td class="w3-border w3-lime">Total (LBP)</td>
+						<td class="w3-lime" th:text="${janTotal}"></td>
+						<td class="w3-lime" th:text="${febTotal}"></td>
+						<td class="w3-lime" th:text="${marTotal}"></td>
+						<td class="w3-lime" th:text="${aprTotal}"></td>
+						<td class="w3-lime" th:text="${mayTotal}"></td>
+						<td class="w3-lime" th:text="${junTotal}"></td>
+						<td class="w3-lime" th:text="${julTotal}"></td>
+						<td class="w3-lime" th:text="${augTotal}"></td>
+						<td class="w3-lime" th:text="${sepTotal}"></td>
+						<td class="w3-lime" th:text="${octTotal}"></td>
+						<td class="w3-lime" th:text="${novTotal}"></td>
+						<td class="w3-lime" th:text="${decTotal}"></td>
+					</tr>
+					<tr class="w3-border">
+						<td class="w3-khaki">Total (USD)</td>
+						<td class="w3-khaki" th:text="${janTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${febTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${marTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${aprTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${mayTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${junTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${julTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${augTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${sepTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${octTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${novTotal / 1500}"></td>
+						<td class="w3-khaki" th:text="${decTotal / 1500}"></td>
+					</tr>
+					<tr class="w3-border">
+						<td class="w3-pale-green">Cumulative (LBP)</td>
+						<td class="w3-pale-green" th:text="${janTotal}"></td>
+						<td class="w3-pale-green" th:text="${febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${octTotal + sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${novTotal + octTotal + sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+						<td class="w3-pale-green" th:text="${decTotal + novTotal + octTotal + sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal}"></td>
+					</tr>
+					<tr class="w3-border">
+						<td class="w3-pale-blue">Cumulative (USD)</td>
+						<td class="w3-pale-blue" th:text="${janTotal / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(octTotal + sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(novTotal + octTotal + sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+						<td class="w3-pale-blue" th:text="${(decTotal + novTotal + octTotal + sepTotal + augTotal + julTotal + junTotal + mayTotal + aprTotal + marTotal + febTotal + janTotal) / 1500}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<a href="/report/dashboard">Back</a>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

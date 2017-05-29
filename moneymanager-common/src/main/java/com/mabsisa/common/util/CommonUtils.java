@@ -34,7 +34,9 @@ import com.mabsisa.common.model.Customer;
 public class CommonUtils {
 
 	public static void main(String[] args) {
-		
+		BigDecimal jan = new BigDecimal("100");
+		BigDecimal feb = new BigDecimal("200");
+		System.out.println(jan.subtract(feb));
 	}
 	
 	private static final DateFormat dateFormat = new SimpleDateFormat("MMyyyy");

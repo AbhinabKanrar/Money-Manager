@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head th:include="fragments/header"></head>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header"
+		th:include="fragments/top" />
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar">
+		<br />
+		<hr />
+		<div class="w3-container">
+			<h5>Dashboard</h5>
+		</div>
+		<div class="w3-bar-block" th:include="fragments/menu" />
+	</nav>
+	<div
+		class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close"
+		title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Reports
+		</div>
+		<div class="w3-input w3-large">
+			<b>Number of Customer Per Region</b>
+		</div>
+		<br/>
+		<p class="error" th:text="${errMessage}"></p>
+		<div class="w3-responsive w3-white">
+			<table class="w3-table"
+				cellspacing="0" width="100%">
+				<thead class="w3-border w3-light-blue">
+					<tr>
+						<th>Region</th>
+						<th>Number of CUstomer</th>
+						<th>Percentage</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="customerPerRegion : ${customerPerRegions}">
+						<td th:text="${customerPerRegion.region}"></td>
+						<td th:text="${customerPerRegion.numberOfCustomer}"></td>
+						<td th:text="${customerPerRegion.percentage}"></td>
+					</tr>
+					<tr class="w3-border">
+						<td class="w3-pale-green">Total</td>
+						<td class="w3-pale-green" th:text="${total}"></td>
+						<td class="w3-pale-green">100</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<a href="/report/dashboard">Back</a>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

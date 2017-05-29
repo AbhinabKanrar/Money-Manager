@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
 import com.mabsisa.common.model.CustomerCollectionDetailAudit;
+import com.mabsisa.common.model.CustomerPerRegion;
+import com.mabsisa.common.model.RevenueByRegion;
 import com.mabsisa.dao.customer.CustomerCollectionDao;
 
 /**
@@ -65,6 +67,17 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "on cust.customer_id=collection.customer_id " + "where collection.collection_id = :collection_id";
 
 	private static final String RETRIEVE_AUDIT_SQL = "SELECT * FROM mm.customer_collection_detail_audit";
+	
+	private static final String RETRIEVE_CUSTOMER_PER_REGION_SQL = "SELECT region,count(customer_id),"
+			+ "(count(customer_id))*100/(SELECT count(customer_id) FROM mm.customer_detail) as percentage, "
+			+ "(SELECT count(customer_id) FROM mm.customer_detail) as total FROM mm.customer_detail group by region";
+	
+	private static final String RETRIEVE_REVENUE_SQL = "SELECT region,sum(ccd.jan_fee)  jan,"
+			+ "sum(ccd.feb_fee) feb,sum(ccd.mar_fee) mar,sum(ccd.apr_fee) apr,sum(ccd.may_fee) may,"
+			+ "sum(ccd.jun_fee) jun,sum(ccd.jul_fee) jul,sum(ccd.aug_fee) aug,sum(ccd.sep_fee) sep,"
+			+ "sum(ccd.oct_fee) oct,sum(ccd.nov_fee) nov,sum(ccd.dec_fee) as dec "
+			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
+			+ "on cd.customer_id=ccd.customer_id group by cd.region";
 
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
 	private static final String BATCH_UPDATE_SQL = "update mm.customer_collection_detail set collector_id=:collector_id where customer_id=:customer_id";
@@ -351,6 +364,69 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		}
 
 		return customerCollectionDetailAudits;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+	public List<CustomerPerRegion> findAllCustomerPerRegion() {
+		List<CustomerPerRegion> customerPerRegions = jdbcTemplate.query(RETRIEVE_CUSTOMER_PER_REGION_SQL,
+				new RowMapper<CustomerPerRegion>() {
+
+					@Override
+					public CustomerPerRegion mapRow(ResultSet rs, int rowNum) throws SQLException {
+						final CustomerPerRegion customerPerRegion = new CustomerPerRegion();
+
+						customerPerRegion.setRegion(rs.getString("region"));
+						customerPerRegion.setNumberOfCustomer(rs.getInt("count"));
+						customerPerRegion.setPercentage(rs.getInt("percentage"));
+						customerPerRegion.setTotal(rs.getInt("total"));
+
+						return customerPerRegion;
+					}
+
+				});
+
+		if (customerPerRegions == null || customerPerRegions.isEmpty()) {
+			return null;
+		}
+
+		return customerPerRegions;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+	public List<RevenueByRegion> findAllRevenueByRegion() {
+		List<RevenueByRegion> revenueByRegions = jdbcTemplate.query(RETRIEVE_REVENUE_SQL,
+				new RowMapper<RevenueByRegion>() {
+
+					@Override
+					public RevenueByRegion mapRow(ResultSet rs, int rowNum) throws SQLException {
+						final RevenueByRegion revenueByRegion = new RevenueByRegion();
+						
+						revenueByRegion.setRegion(rs.getString("region"));
+						revenueByRegion.setJanRevenue(rs.getBigDecimal("jan"));
+						revenueByRegion.setFebRevenue(rs.getBigDecimal("feb"));
+						revenueByRegion.setMarRevenue(rs.getBigDecimal("mar"));
+						revenueByRegion.setAprRevenue(rs.getBigDecimal("apr"));
+						revenueByRegion.setMayRevenue(rs.getBigDecimal("may"));
+						revenueByRegion.setJunRevenue(rs.getBigDecimal("jun"));
+						revenueByRegion.setJulRevenue(rs.getBigDecimal("jul"));
+						revenueByRegion.setAugRevenue(rs.getBigDecimal("aug"));
+						revenueByRegion.setSepRevenue(rs.getBigDecimal("sep"));
+						revenueByRegion.setOctRevenue(rs.getBigDecimal("oct"));
+						revenueByRegion.setNovRevenue(rs.getBigDecimal("nov"));
+						revenueByRegion.setDecRevenue(rs.getBigDecimal("dec"));
+						
+						return revenueByRegion;
+					}
+
+				});
+
+		if (revenueByRegions == null || revenueByRegions.isEmpty()) {
+			return null;
+		}
+
+		return revenueByRegions;
 	}
 
 }

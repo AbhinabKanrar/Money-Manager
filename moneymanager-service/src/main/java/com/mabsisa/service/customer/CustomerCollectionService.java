@@ -6,6 +6,7 @@ package com.mabsisa.service.customer;
 import java.util.List;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
+import com.mabsisa.common.model.CustomerPerRegion;
 import com.mabsisa.common.model.PaymentReceipt;
 
 /**
