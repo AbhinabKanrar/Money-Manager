@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mabsisa.common.model.CustomerCollectionDetail;
-import com.mabsisa.common.model.CustomerPerRegion;
 import com.mabsisa.common.model.PaymentReceipt;
 import com.mabsisa.common.model.User;
 import com.mabsisa.common.util.CommonUtils;

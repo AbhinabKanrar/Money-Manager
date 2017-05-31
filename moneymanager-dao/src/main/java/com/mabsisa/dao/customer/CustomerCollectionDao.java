@@ -9,6 +9,8 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 
+import com.mabsisa.common.model.CollectorCollection;
+import com.mabsisa.common.model.CustomerAssignmentCollector;
 import com.mabsisa.common.model.CustomerCollectionDetail;
 import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.common.model.CustomerPerRegion;
@@ -41,6 +43,12 @@ public interface CustomerCollectionDao {
 	
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	List<RevenueByRegion> findAllRevenueByRegion();
+	
+	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	List<CustomerAssignmentCollector> findAllAssignmentByCollector();
+	
+	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	List<CollectorCollection> findAllCollectionByCollector();
 	
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	CustomerCollectionDetail findByCollectionId(long collectionId);

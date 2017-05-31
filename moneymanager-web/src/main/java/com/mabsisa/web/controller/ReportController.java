@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mabsisa.common.model.CollectorCollection;
+import com.mabsisa.common.model.CustomerAssignmentCollector;
 import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.common.model.CustomerPerRegion;
 import com.mabsisa.common.model.RevenueByRegion;
@@ -60,6 +62,20 @@ public class ReportController {
 		return "report/trackassignment";
 	}
 
+	@GetMapping("/trackassignment/collector")
+	public String trackAssignmentByCollector(Model model) {
+		List<CustomerAssignmentCollector> customerAssignmentCollectors = new ArrayList<CustomerAssignmentCollector>();
+		try {
+			customerAssignmentCollectors = reportService.findAllAssignmentByCollector();
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("customerAssignmentCollectors", customerAssignmentCollectors);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "report/trackAssignmentbycollector";
+	}
+
 	@GetMapping("/collectionmismatchlocationtracking")
 	public String collectionMismatchLocationTracking(Model model) {
 		List<CustomerCollectionDetailAudit> customerCollectionDetailAudits = new ArrayList<CustomerCollectionDetailAudit>();
@@ -92,6 +108,20 @@ public class ReportController {
 		return "report/numofcustomerperregion";
 	}
 
+	@GetMapping("/search/collecton/collector")
+	public String searchCollectionByCollector(Model model) {
+		List<CollectorCollection> collectorCollections = new ArrayList<CollectorCollection>();
+		try {
+			collectorCollections = reportService.findAllCollectionByCollector();
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("collectorCollections", collectorCollections);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "report/collectionbycollector";
+	}
+	
 	@GetMapping("/search/revenuereceived")
 	public String revenueReceived(Model model) {
 		List<RevenueByRegion> revenueByRegions = new ArrayList<RevenueByRegion>();
@@ -141,7 +171,7 @@ public class ReportController {
 		model.addAttribute("octTotal", octTotal);
 		model.addAttribute("novTotal", novTotal);
 		model.addAttribute("decTotal", decTotal);
-		
+
 		model.addAttribute("revenueByRegions", revenueByRegions);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "report/revenuebyregion";
@@ -164,5 +194,5 @@ public class ReportController {
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "report/paidunpaid";
 	}
-	
+
 }

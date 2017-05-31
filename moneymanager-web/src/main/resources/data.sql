@@ -57,5 +57,10 @@ CREATE TABLE IF NOT EXISTS mm.customer_collection_detail_audit(
 	CONSTRAINT customer_payment_details_user_id_fk_ FOREIGN KEY (collector_id) REFERENCES mm.user_auth_detail (user_id)
 );
 
---INSERT INTO mm.user_auth_detail VALUES (2860524688118663536,'admin','$2a$10$trT3.R/Nfey62eczbKEnueTcIbJXW.u1ffAo/XfyLpofwNDbEB86O','ADMIN',null,null,'ACTIVE');
---INSERT INTO mm.customer_detail (customer_id,region,building,address,client,name,floor,fee,mahal,telephone,left_travel,note) VALUES (4641962035890310183,'orange','OA','الجمل زاروب الكشاف المسلم','OA1',' حسن مرعي ','1',20000,null,'01/702501',null,null);
+CREATE TABLE IF NOT EXISTS mm.collector_collection(
+	id BIGINT PRIMARY KEY,
+	collector_id BIGINT NOT NULL,
+	collector_name VARCHAR(20) NOT NULL,
+	amount numeric,
+	CONSTRAINT collector_collection_fk_ FOREIGN KEY (collector_id) REFERENCES mm.user_auth_detail (user_id)
+);

@@ -43,7 +43,7 @@
 						<td th:text="${customerCollectionDetailAudit.auditId}"></td>
 						<td><a th:href="@{|/customer/find/${customerCollectionDetailAudit.customerId}|}" th:text="|${customerCollectionDetailAudit.customerId}"></a></td>
 						<td><a th:href="@{|/user/update/${customerCollectionDetailAudit.collectorId}|}" th:text="|${customerCollectionDetailAudit.collectorId}"></a></td>
-						<td th:text="${customerCollectionDetailAudit.location}"></td>
+						<td><a target="_blank" th:href="@{|https://www.google.co.in/maps/place/${customerCollectionDetailAudit.location}|}" th:text="|${customerCollectionDetailAudit.location}"></a></td>
 						<td th:text="${customerCollectionDetailAudit.reason}"></td>
 						<td th:text="${customerCollectionDetailAudit.collectionTs}"></td>
 					</tr>

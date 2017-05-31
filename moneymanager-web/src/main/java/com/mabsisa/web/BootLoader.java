@@ -48,7 +48,7 @@ public class BootLoader implements CommandLineRunner {
 			user = userService.save(user);
 		} catch(Exception e) {}
 	}
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(BootLoader.class, args);
 	}

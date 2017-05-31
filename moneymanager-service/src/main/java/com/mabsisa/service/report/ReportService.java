@@ -6,6 +6,8 @@ package com.mabsisa.service.report;
 import java.util.List;
 import java.util.Map;
 
+import com.mabsisa.common.model.CollectorCollection;
+import com.mabsisa.common.model.CustomerAssignmentCollector;
 import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.common.model.CustomerPerRegion;
 import com.mabsisa.common.model.RevenueByRegion;
@@ -25,5 +27,9 @@ public interface ReportService {
 	List<RevenueByRegion> findAllRevenueByRegion();
 	
 	Map<String, Object> findPaidUnPaidCustomerPerMonth();
+	
+	List<CustomerAssignmentCollector> findAllAssignmentByCollector();
+	
+	List<CollectorCollection> findAllCollectionByCollector();
 	
 }

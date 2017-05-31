@@ -12,6 +12,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mabsisa.common.model.CollectorCollection;
+import com.mabsisa.common.model.CustomerAssignmentCollector;
 import com.mabsisa.common.model.CustomerCollectionDetail;
 import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.common.model.CustomerPerRegion;
@@ -33,10 +35,11 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public Map<String, Integer> findAssignmentRecord() {
+		int SIZE  = 0;
 		Map<String, Integer> records = new HashMap<String, Integer>();
 		List<CustomerCollectionDetail> customerCollectionDetails = customerCollectionDao.findAll();
-		int SIZE = customerCollectionDetails.size();
-		if (SIZE > 0) {
+		if (customerCollectionDetails != null && !customerCollectionDetails.isEmpty()) {
+			SIZE = customerCollectionDetails.size();
 			records.put(CommonConstant.KEY_TOTAL_CUSTOMER, SIZE);
 			records.put(CommonConstant.KEY_TOTAL_ASSIGNED_CUSTOMER, (int) customerCollectionDetails.stream()
 					.filter(customerCollectionDetail -> customerCollectionDetail.getCollectorId() != 0).count());
@@ -218,6 +221,16 @@ public class ReportServiceImpl implements ReportService {
 			return BigDecimal.ZERO;
 		}
 		return monthlyFee;
+	}
+
+	@Override
+	public List<CustomerAssignmentCollector> findAllAssignmentByCollector() {
+		return customerCollectionDao.findAllAssignmentByCollector();
+	}
+
+	@Override
+	public List<CollectorCollection> findAllCollectionByCollector() {
+		return customerCollectionDao.findAllCollectionByCollector();
 	}
 	
 }

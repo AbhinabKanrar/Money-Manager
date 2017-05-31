@@ -3,6 +3,7 @@
  */
 package com.mabsisa.dao.user.impl;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -53,7 +54,7 @@ public class UserDaoImpl implements UserDao {
 	private static final String RETRIEVE_SQL = "select * from mm.user_auth_detail";
 	private static final String RETRIEVE_SQL_BY_ID = "select * from mm.user_auth_detail where user_id =:user_id";
 	private static final String UPDATE_SQL = "select * from mm.user_auth_detail where user_id = ? for update";
-	private static final String DELETE_SQL = "delete from mm.user_auth_detail where user_id = ?";
+	private static final String INSERT_AUDIT_SQL = "INSERT INTO mm.collector_collection (id,collector_id,collector_name,amount) VALUES (:id,:collector_id,:collector_name,:amount)";
 
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
@@ -69,6 +70,20 @@ public class UserDaoImpl implements UserDao {
 		params.put("user_status", user.getUserStatus().name());
 		
 		jdbcNTemplate.update(INSERT_SQL, params);
+		
+		insertAudit(user);
+		
+		return user;
+	}
+	
+	private User insertAudit(User user) {
+		Map<String, Object> params = new HashMap<>(3);
+		params.put("id", UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+		params.put("collector_id", user.getUserId());
+		params.put("collector_name", user.getUsername());
+		params.put("amount", new BigDecimal("0.00"));
+		
+		jdbcNTemplate.update(INSERT_AUDIT_SQL, params);
 		
 		return user;
 	}

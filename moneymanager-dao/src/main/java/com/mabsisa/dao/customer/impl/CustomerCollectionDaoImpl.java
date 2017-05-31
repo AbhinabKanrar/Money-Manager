@@ -26,6 +26,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mabsisa.common.model.CollectorCollection;
+import com.mabsisa.common.model.CustomerAssignmentCollector;
 import com.mabsisa.common.model.CustomerCollectionDetail;
 import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.common.model.CustomerPerRegion;
@@ -67,11 +69,11 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "on cust.customer_id=collection.customer_id " + "where collection.collection_id = :collection_id";
 
 	private static final String RETRIEVE_AUDIT_SQL = "SELECT * FROM mm.customer_collection_detail_audit";
-	
+
 	private static final String RETRIEVE_CUSTOMER_PER_REGION_SQL = "SELECT region,count(customer_id),"
 			+ "(count(customer_id))*100/(SELECT count(customer_id) FROM mm.customer_detail) as percentage, "
 			+ "(SELECT count(customer_id) FROM mm.customer_detail) as total FROM mm.customer_detail group by region";
-	
+
 	private static final String RETRIEVE_REVENUE_SQL = "SELECT region,sum(ccd.jan_fee)  jan,"
 			+ "sum(ccd.feb_fee) feb,sum(ccd.mar_fee) mar,sum(ccd.apr_fee) apr,sum(ccd.may_fee) may,"
 			+ "sum(ccd.jun_fee) jun,sum(ccd.jul_fee) jul,sum(ccd.aug_fee) aug,sum(ccd.sep_fee) sep,"
@@ -79,7 +81,23 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
 			+ "on cd.customer_id=ccd.customer_id group by cd.region";
 
+	private static final String RETRIEVE_ASSIGNMENT_BY_COLLECTOR_SQL = "SELECT ccd.collector_id,count(cd.customer_id) "
+			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
+			+ "on cd.customer_id=ccd.customer_id " + "group by ccd.collector_id";
+
+	private static final String RETRIEVE_COLLECTION_BY_COLLECTOR_SQL = "SELECT ccd.collector_id,uad.username,"
+			+ "sum(ccd.jan_fee) + sum(ccd.feb_fee) + sum(ccd.mar_fee) + sum(ccd.apr_fee) + sum(ccd.may_fee) + "
+			+ "sum(ccd.jun_fee) + sum(ccd.jul_fee) + sum(ccd.aug_fee) + sum(ccd.sep_fee) + sum(ccd.oct_fee) + "
+			+ "sum(ccd.nov_fee) + sum(ccd.dec_fee) as sum "
+			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
+			+ "on cd.customer_id=ccd.customer_id " + "join mm.user_auth_detail uad "
+			+ "on uad.user_id=ccd.collector_id " + "where ccd.collector_id is not null "
+			+ "group by ccd.collector_id,uad.username";
+
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
+	
+	private static final String UPDATE_AUDIT_SQL = "SELECT * FROM mm.collector_collection where collector_id=? FOR UPDATE";
+	
 	private static final String BATCH_UPDATE_SQL = "update mm.customer_collection_detail set collector_id=:collector_id where customer_id=:customer_id";
 
 	@Override
@@ -220,6 +238,8 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 
 		jdbcTemplate.query(psc, rowHandler);
 
+		updateCollectorAudit(customerCollectionDetail);
+		
 		if (customerCollectionDetail.getDue().compareTo(customerCollectionDetail.getActual()) > 0
 				&& customerCollectionDetail.getReasonCode() != null
 				&& !customerCollectionDetail.getReasonCode().trim().isEmpty()) {
@@ -229,6 +249,34 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		return customerCollectionDetail;
 	}
 
+	private void updateCollectorAudit(CustomerCollectionDetail customerCollectionDetail) {
+		PreparedStatementCreatorFactory queryFactory = new PreparedStatementCreatorFactory(UPDATE_AUDIT_SQL,
+				Arrays.asList(new SqlParameter(Types.BIGINT)));
+		queryFactory.setUpdatableResults(true);
+		queryFactory.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+		PreparedStatementCreator psc = queryFactory
+				.newPreparedStatementCreator(new Object[] { customerCollectionDetail.getCollectorId() });
+		final CollectorCollection collectorCollection = new CollectorCollection();
+		RowCallbackHandler rowHandler = new RowCallbackHandler() {
+
+			@Override
+			public void processRow(ResultSet rs) throws SQLException {
+				
+				collectorCollection.setId(rs.getLong("id"));
+				collectorCollection.setCollectorId(rs.getLong("collector_id"));
+				collectorCollection.setCollectorName(rs.getString("collector_name"));
+				collectorCollection.setCollectionAmount(rs.getBigDecimal("amount"));
+				rs.updateBigDecimal("amount", customerCollectionDetail.getActual().add(collectorCollection.getCollectionAmount()));
+
+				rs.updateRow();
+			}
+
+		};
+
+		jdbcTemplate.query(psc, rowHandler);
+
+	}
+	
 	private CustomerCollectionDetail updateAudit(CustomerCollectionDetail customerCollectionDetail) {
 
 		Map<String, Object> params = new HashMap<>(5);
@@ -402,7 +450,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 					@Override
 					public RevenueByRegion mapRow(ResultSet rs, int rowNum) throws SQLException {
 						final RevenueByRegion revenueByRegion = new RevenueByRegion();
-						
+
 						revenueByRegion.setRegion(rs.getString("region"));
 						revenueByRegion.setJanRevenue(rs.getBigDecimal("jan"));
 						revenueByRegion.setFebRevenue(rs.getBigDecimal("feb"));
@@ -416,7 +464,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 						revenueByRegion.setOctRevenue(rs.getBigDecimal("oct"));
 						revenueByRegion.setNovRevenue(rs.getBigDecimal("nov"));
 						revenueByRegion.setDecRevenue(rs.getBigDecimal("dec"));
-						
+
 						return revenueByRegion;
 					}
 
@@ -427,6 +475,57 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		}
 
 		return revenueByRegions;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+	public List<CustomerAssignmentCollector> findAllAssignmentByCollector() {
+		List<CustomerAssignmentCollector> customerAssignmentCollectors = jdbcTemplate
+				.query(RETRIEVE_ASSIGNMENT_BY_COLLECTOR_SQL, new RowMapper<CustomerAssignmentCollector>() {
+
+					@Override
+					public CustomerAssignmentCollector mapRow(ResultSet rs, int rowNum) throws SQLException {
+						final CustomerAssignmentCollector customerAssignmentCollector = new CustomerAssignmentCollector();
+
+						customerAssignmentCollector.setCollectorId(rs.getLong("collector_id"));
+						customerAssignmentCollector.setCustomerCount(rs.getInt("count"));
+
+						return customerAssignmentCollector;
+					}
+
+				});
+
+		if (customerAssignmentCollectors == null || customerAssignmentCollectors.isEmpty()) {
+			return null;
+		}
+
+		return customerAssignmentCollectors;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+	public List<CollectorCollection> findAllCollectionByCollector() {
+		List<CollectorCollection> collectorCollections = jdbcTemplate
+				.query(RETRIEVE_COLLECTION_BY_COLLECTOR_SQL, new RowMapper<CollectorCollection>() {
+
+					@Override
+					public CollectorCollection mapRow(ResultSet rs, int rowNum) throws SQLException {
+						final CollectorCollection collectorCollection = new CollectorCollection();
+
+						collectorCollection.setCollectorId(rs.getLong("collector_id"));
+						collectorCollection.setCollectorName(rs.getString("username"));
+						collectorCollection.setCollectionAmount(rs.getBigDecimal("sum"));
+
+						return collectorCollection;
+					}
+
+				});
+
+		if (collectorCollections == null || collectorCollections.isEmpty()) {
+			return null;
+		}
+
+		return collectorCollections;
 	}
 
 }
