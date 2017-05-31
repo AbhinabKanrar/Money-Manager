@@ -75,8 +75,6 @@
 						</div>
 					</a>
 				</div>
-			</div>
-			<div class="w3-row-padding w3-margin-bottom">
 				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}"
 					class="w3-quarter">
 					<a href="/report/search/revenuereceived">
@@ -92,6 +90,8 @@
 						</div>
 					</a>
 				</div>
+			</div>
+			<div class="w3-row-padding w3-margin-bottom">
 				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}"
 					class="w3-quarter">
 					<a href="/report/search/collecton/collector">
@@ -104,6 +104,22 @@
 							</div>
 							<div class="w3-clear"></div>
 							<h4>View Collection By Collector </h4>
+						</div>
+					</a>
+				</div>
+				
+				<div th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}"
+					class="w3-quarter">
+					<a href="/report/search/collectionoftoday">
+						<div class="w3-container w3-teal w3-padding-16">
+							<div class="w3-left">
+								<i class="fa fa-eye w3-xxxlarge"></i>
+							</div>
+							<div class="w3-right">
+								<h3><i class="fa fa-binoculars w3-xxxlarge"></i></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>View Today's collection</h4>
 						</div>
 					</a>
 				</div>

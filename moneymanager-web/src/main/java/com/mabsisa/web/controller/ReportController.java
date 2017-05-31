@@ -122,6 +122,20 @@ public class ReportController {
 		return "report/collectionbycollector";
 	}
 	
+	@GetMapping("/search/collectionoftoday")
+	public String searchCollectionOfToday(Model model) {
+		List<CollectorCollection> collectorCollections = new ArrayList<CollectorCollection>();
+		try {
+			collectorCollections = reportService.findAllCollectionOfToday();
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("collectorCollections", collectorCollections);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "report/collectionbycollector";
+	}
+	
 	@GetMapping("/search/revenuereceived")
 	public String revenueReceived(Model model) {
 		List<RevenueByRegion> revenueByRegions = new ArrayList<RevenueByRegion>();

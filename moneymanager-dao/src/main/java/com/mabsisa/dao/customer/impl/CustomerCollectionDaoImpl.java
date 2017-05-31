@@ -94,6 +94,8 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "on uad.user_id=ccd.collector_id " + "where ccd.collector_id is not null "
 			+ "group by ccd.collector_id,uad.username";
 
+	private static final String RETRIEVE_COLLECTION_OF_TODAY_SQL = "SELECT * FROM mm.collector_collection";
+	
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
 	
 	private static final String UPDATE_AUDIT_SQL = "SELECT * FROM mm.collector_collection where collector_id=? FOR UPDATE";
@@ -515,6 +517,33 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 						collectorCollection.setCollectorId(rs.getLong("collector_id"));
 						collectorCollection.setCollectorName(rs.getString("username"));
 						collectorCollection.setCollectionAmount(rs.getBigDecimal("sum"));
+
+						return collectorCollection;
+					}
+
+				});
+
+		if (collectorCollections == null || collectorCollections.isEmpty()) {
+			return null;
+		}
+
+		return collectorCollections;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+	public List<CollectorCollection> findAllCollectionOfToday() {
+		List<CollectorCollection> collectorCollections = jdbcTemplate
+				.query(RETRIEVE_COLLECTION_OF_TODAY_SQL, new RowMapper<CollectorCollection>() {
+
+					@Override
+					public CollectorCollection mapRow(ResultSet rs, int rowNum) throws SQLException {
+						final CollectorCollection collectorCollection = new CollectorCollection();
+
+						collectorCollection.setId(rs.getLong("id"));
+						collectorCollection.setCollectorId(rs.getLong("collector_id"));
+						collectorCollection.setCollectorName(rs.getString("collector_name"));
+						collectorCollection.setCollectionAmount(rs.getBigDecimal("amount"));
 
 						return collectorCollection;
 					}

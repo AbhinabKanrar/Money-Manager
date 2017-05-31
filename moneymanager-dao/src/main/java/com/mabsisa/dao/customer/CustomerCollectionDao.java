@@ -51,6 +51,9 @@ public interface CustomerCollectionDao {
 	List<CollectorCollection> findAllCollectionByCollector();
 	
 	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	List<CollectorCollection> findAllCollectionOfToday();
+	
+	@Retryable(maxAttempts = CommonConstant.DB_RETRY_COUNT, value = DataAccessResourceFailureException.class, backoff = @Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	CustomerCollectionDetail findByCollectionId(long collectionId);
 
 }

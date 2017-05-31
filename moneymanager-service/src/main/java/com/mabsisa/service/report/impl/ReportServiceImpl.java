@@ -232,5 +232,10 @@ public class ReportServiceImpl implements ReportService {
 	public List<CollectorCollection> findAllCollectionByCollector() {
 		return customerCollectionDao.findAllCollectionByCollector();
 	}
+
+	@Override
+	public List<CollectorCollection> findAllCollectionOfToday() {
+		return customerCollectionDao.findAllCollectionOfToday();
+	}
 	
 }

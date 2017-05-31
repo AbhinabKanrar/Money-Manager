@@ -32,4 +32,6 @@ public interface ReportService {
 	
 	List<CollectorCollection> findAllCollectionByCollector();
 	
+	List<CollectorCollection> findAllCollectionOfToday();
+	
 }
