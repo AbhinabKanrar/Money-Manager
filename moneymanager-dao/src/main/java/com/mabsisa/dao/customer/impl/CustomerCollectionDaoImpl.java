@@ -3,6 +3,7 @@
  */
 package com.mabsisa.dao.customer.impl;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -99,6 +100,8 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
 	
 	private static final String UPDATE_AUDIT_SQL = "SELECT * FROM mm.collector_collection where collector_id=? FOR UPDATE";
+	
+	private static final String UPDATE_REFRESH_AUDIT_SQL = "update mm.collector_collection set amount = :amount";
 	
 	private static final String BATCH_UPDATE_SQL = "update mm.customer_collection_detail set collector_id=:collector_id where customer_id=:customer_id";
 
@@ -555,6 +558,14 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		}
 
 		return collectorCollections;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public void refresh() {
+		Map<String, Object> params = new HashMap<>(1);
+		params.put("amount", new BigDecimal("0.00"));
+		jdbcNTemplate.update(UPDATE_REFRESH_AUDIT_SQL, params);
 	}
 
 }

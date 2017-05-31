@@ -3,10 +3,13 @@
  */
 package com.mabsisa.web.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -167,6 +170,16 @@ public class CollectionManagementRouter {
 		return "collectionmanagement/addupdatecollection";
 	}
 
+	@PostMapping("/remove/todayhistory")
+	public void removeTodayHistory(HttpServletResponse response) throws IOException {
+		try {
+			customerCollectionService.refresh();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		response.sendRedirect("/report/search/collectionoftoday");
+	}
+	
 	private boolean isValid(CustomerCollectionDetail customerCollectionDetail) {
 		if (customerCollectionDetail != null && customerCollectionDetail.getCollectionId() != null
 				&& customerCollectionDetail.getCollectorId() != 0) {

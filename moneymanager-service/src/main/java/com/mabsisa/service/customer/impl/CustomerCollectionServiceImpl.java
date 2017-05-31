@@ -189,4 +189,9 @@ public class CustomerCollectionServiceImpl implements CustomerCollectionService 
 		return paymentReceipt;
 	}
 
+	@Override
+	public void refresh() {
+		customerCollectionDao.refresh();
+	}
+
 }

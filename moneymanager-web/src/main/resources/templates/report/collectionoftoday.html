@@ -29,12 +29,19 @@
 		</div>
 		<br/>
 		<p class="error" th:text="${errMessage}"></p>
+		<p>
+			<form th:action="@{/collection/remove/todayhistory}" method="post" class="w3-container w3-white" autocomplete="off">
+				<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="refresh">
+					<i class="w3-large fa fa-plus">&nbsp;&nbsp;Refresh</i>
+				</button>
+			</form>
+		</p>
 		<div class="w3-responsive w3-white">
 			<table id="datatable" class="display responsive nowrap cell-border" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Collector Name</th>
-						<th>Collection Amount</th>
+						<th>Amount</th>
 					</tr>
 				</thead>
 				<tbody>

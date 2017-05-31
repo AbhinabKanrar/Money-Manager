@@ -22,5 +22,6 @@ public interface CustomerCollectionService {
 	List<CustomerCollectionDetail> findByCollectorName(String collectorName);
 	CustomerCollectionDetail findCollectionByCollectionId(long collectionId);
 	PaymentReceipt generatePayementReceipt(long collectionId);
+	void refresh();
 	
 }

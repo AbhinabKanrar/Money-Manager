@@ -133,7 +133,7 @@ public class ReportController {
 		}
 		model.addAttribute("collectorCollections", collectorCollections);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
-		return "report/collectionbycollector";
+		return "report/collectionoftoday";
 	}
 	
 	@GetMapping("/search/revenuereceived")
