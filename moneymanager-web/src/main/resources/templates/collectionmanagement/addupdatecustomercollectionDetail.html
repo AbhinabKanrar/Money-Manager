@@ -29,6 +29,7 @@
 					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
 						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
 					</button>
+					<a th:href="@{|/customer/find/${customerCollectionDetail.customerId}|}" class="w3-button w3-green">Edit Customer</a>
 					<a href="/collection/view" class="w3-button w3-green">Back</a>
 				</span>
 			</p>
@@ -83,7 +84,8 @@
 						<tr>
 							<td th:text="${customerCollectionDetail.customerId}"></td>
 							<td>
-								<select th:field="*{collectorId}" required="required">
+								<select th:field="*{collectorId}">
+									<option value="">-</option>
 									<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
 								</select>
 							</td>
@@ -144,6 +146,7 @@
 					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="update">
 						<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Update</i>
 					</button>
+					<a th:href="@{|/customer/find/${customerCollectionDetail.customerId}|}" class="w3-button w3-green">Edit Customer</a>
 					<a href="/collection/view" class="w3-button w3-green">Back</a>
 				</span>
 			</p>

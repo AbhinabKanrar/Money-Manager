@@ -16,7 +16,7 @@ public class CustomerCollectionDetail implements Serializable {
 
 	private Long collectionId;
 	private Long customerId;
-	private long collectorId;
+	private Long collectorId;
 	private String region;
 	private String building;
 	private String address;
@@ -57,10 +57,10 @@ public class CustomerCollectionDetail implements Serializable {
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-	public long getCollectorId() {
+	public Long getCollectorId() {
 		return collectorId;
 	}
-	public void setCollectorId(long collectorId) {
+	public void setCollectorId(Long collectorId) {
 		this.collectorId = collectorId;
 	}
 	public String getRegion() {

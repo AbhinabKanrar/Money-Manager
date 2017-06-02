@@ -3,7 +3,11 @@
  */
 package com.mabsisa.web.controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +15,13 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,6 +72,90 @@ public class CollectionManagementRouter {
 		model.addAttribute("customerCollectionDetails", customerCollectionDetails);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "collectionmanagement/listcustomercollectionDetail";
+	}
+	
+	@GetMapping("/download")
+	public void download(HttpServletResponse response) throws IOException {
+		String FILE_NAME = "/tmp/MyFirstExcel.xlsx";
+		
+		XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Data");
+        
+        int rowNum = 0;
+
+        List<CustomerCollectionDetail> customerCollectionDetails = customerCollectionService.findAll();
+        if (customerCollectionDetails != null && !customerCollectionDetails.isEmpty()) {
+        	Row row = sheet.createRow(rowNum++);
+        	CellStyle style = workbook.createCellStyle();
+        	style.setFillBackgroundColor(IndexedColors.BLUE.getIndex());
+        	row.setRowStyle(style);
+        	int colNum = 0;
+        	Cell cell = row.createCell(colNum++);
+        	cell.setCellValue("Customer ID");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Region");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Building");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Address");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Client");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Name");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Floor");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Mahal");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Telephone");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Left/Travel");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Note");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Collector ID");
+			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+				colNum = 0;
+				row = sheet.createRow(rowNum++);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getCustomerId());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getRegion());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getBuilding());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getAddress());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getClient());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getName());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getFloor());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getFee() != null ? customerCollectionDetail.getFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getMahal());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getTelephone());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getLeftTravel());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getNote());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getCollectionId());
+			}
+		}
+        
+        InputStream outputStream = new FileInputStream(FILE_NAME);
+        
+        response.addHeader("Content-disposition", "attachment;filename=Customer Info v3.xlsx");
+    	response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    	IOUtils.copy(outputStream, response.getOutputStream());
+    	workbook.write(response.getOutputStream());
+        workbook.close();
+    	response.flushBuffer();
 	}
 
 	@GetMapping("/view/{collectionId}")
@@ -181,8 +276,7 @@ public class CollectionManagementRouter {
 	}
 	
 	private boolean isValid(CustomerCollectionDetail customerCollectionDetail) {
-		if (customerCollectionDetail != null && customerCollectionDetail.getCollectionId() != null
-				&& customerCollectionDetail.getCollectorId() != 0) {
+		if (customerCollectionDetail != null && customerCollectionDetail.getCollectionId() != null) {
 			return true;
 		}
 		return false;

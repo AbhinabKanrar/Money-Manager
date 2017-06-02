@@ -22,13 +22,16 @@
 			<b>View Billing History</b>
 		</div>
 		<p class="error" th:text="${errMessage}"></p>
+		<a href="/collection/download" class="w3-btn w3-purple">Print</a>
 		<div class="w3-responsive">
 			<table id="mappingdatatable" class="display responsive nowrap cell-border"
 				cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Action</th>
+						<!-- 
 						<th>Collector ID</th>
+						 -->
 						<th>Region</th>
 						<th>Building</th>
 						<th>Address</th>
@@ -61,7 +64,9 @@
 							<a th:href="@{|/collection/view/${customerCollectionDetail.collectionId}|}" class="w3-button w3-green">Edit</a>
 							<a th:if="${customerCollectionDetail.collectorId} != 0" th:href="@{|/user/update/${customerCollectionDetail.collectorId}|}" class="w3-button w3-green">View Collector</a>
 						</td>
+						<!-- 
 						<td th:text="${customerCollectionDetail.collectorId != 0} ? ${customerCollectionDetail.collectorId} : '-'"></td>
+						 -->
 						<td th:text="${customerCollectionDetail.region}"></td>
 						<td th:text="${customerCollectionDetail.building}"></td>
 						<td th:text="${customerCollectionDetail.address}"></td>

@@ -124,12 +124,16 @@
 						<input  type="text" id="dueAmount" th:field="*{due}" disabled="disabled"/>
 					</div>
 				</div>
+				<br/>
 				<div th:if="${status} == 0" class="w3-row-padding">
-					<div class="w3-half">
+					<div class="w3-third">
 						<label>Paying Amount</label>
 					</div>
-					<div class="w3-half">
+					<div class="w3-third">
 						<input type="text" id="actualAmount" th:field="*{actual}"/>
+					</div>
+					<div class="w3-third">
+						<button type="button" id="absentbtn">Customer Not Here</button>
 					</div>
 				</div>
 				<div th:if="${status} == 0" class="w3-row-padding" id="reason">
@@ -162,5 +166,13 @@
 	<script src="/js/lib/jquery.dataTables.min.js"></script>
 	<script src="/js/app.js"></script>
 	<script src="/js/location.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    $("#absentbtn").click(function(e){
+		    	$("#actualAmount").val("0.00");
+		    	$("#reasoncode").val("Customer Not Here");
+		    });
+		});
+	</script>
 </body>
 </html>

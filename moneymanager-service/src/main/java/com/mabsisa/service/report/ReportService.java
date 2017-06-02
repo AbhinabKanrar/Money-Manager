@@ -20,6 +20,8 @@ public interface ReportService {
 
 	Map<String, Integer> findAssignmentRecord();
 	
+	Map<String, Integer> findPaidUnpaidInfo();
+	
 	List<CustomerCollectionDetailAudit> findAll();
 	
 	List<CustomerPerRegion> findAllCustomerPerRegion();

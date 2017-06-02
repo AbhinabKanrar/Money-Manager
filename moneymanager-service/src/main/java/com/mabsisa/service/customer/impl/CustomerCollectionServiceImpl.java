@@ -61,7 +61,7 @@ public class CustomerCollectionServiceImpl implements CustomerCollectionService 
 			List<CustomerCollectionDetail> allCustomerCollectionDetails = customerCollectionDao.findAll();
 			if (allCustomerCollectionDetails != null && !allCustomerCollectionDetails.isEmpty()) {
 				customerCollectionDetails = allCustomerCollectionDetails.stream().filter(customerCollectionDetail -> {
-					if (customerCollectionDetail.getCollectorId() == user.getUserId()) {
+					if (customerCollectionDetail.getCollectorId().equals(user.getUserId())) {
 						BigDecimal fee = customerCollectionDetail.getFee();
 						BigDecimal janFee = customerCollectionDetail.getJanFee();
 						BigDecimal febFee = customerCollectionDetail.getFebFee();

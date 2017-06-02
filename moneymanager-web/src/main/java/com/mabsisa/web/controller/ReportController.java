@@ -51,12 +51,18 @@ public class ReportController {
 					records.get(CommonConstant.KEY_TOTAL_ASSIGNED_CUSTOMER));
 			model.addAttribute(CommonConstant.KEY_TOTAL_UNASSIGNED_CUSTOMER,
 					records.get(CommonConstant.KEY_TOTAL_UNASSIGNED_CUSTOMER));
+			model.addAttribute(CommonConstant.KEY_TOTAL_PAID_CUSTOMER,
+					records.get(CommonConstant.KEY_TOTAL_PAID_CUSTOMER));
+			model.addAttribute(CommonConstant.KEY_TOTAL_UNPAID_CUSTOMER,
+					records.get(CommonConstant.KEY_TOTAL_UNPAID_CUSTOMER));
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
 			model.addAttribute(CommonConstant.KEY_TOTAL_CUSTOMER, 0);
 			model.addAttribute(CommonConstant.KEY_TOTAL_ASSIGNED_CUSTOMER, 0);
 			model.addAttribute(CommonConstant.KEY_TOTAL_UNASSIGNED_CUSTOMER, 0);
+			model.addAttribute(CommonConstant.KEY_TOTAL_PAID_CUSTOMER, 0);
+			model.addAttribute(CommonConstant.KEY_TOTAL_UNPAID_CUSTOMER, 0);
 		}
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "report/trackassignment";

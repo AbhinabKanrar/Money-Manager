@@ -30,6 +30,9 @@ import com.mabsisa.service.report.ReportService;
 @Service
 public class ReportServiceImpl implements ReportService {
 
+	private int paidCounter = 0;
+	private int unpaidCounter = 0;
+	
 	@Autowired
 	private CustomerCollectionDao customerCollectionDao;
 
@@ -45,10 +48,51 @@ public class ReportServiceImpl implements ReportService {
 					.filter(customerCollectionDetail -> customerCollectionDetail.getCollectorId() != 0).count());
 			records.put(CommonConstant.KEY_TOTAL_UNASSIGNED_CUSTOMER, (int) customerCollectionDetails.stream()
 					.filter(customerCollectionDetail -> customerCollectionDetail.getCollectorId() == 0).count());
+			customerCollectionDetails.forEach(customerCollectionDetail -> {
+				BigDecimal fee = customerCollectionDetail.getFee();
+				BigDecimal janFee = customerCollectionDetail.getJanFee();
+				BigDecimal febFee = customerCollectionDetail.getFebFee();
+				BigDecimal marFee = customerCollectionDetail.getMarFee();
+				BigDecimal aprFee = customerCollectionDetail.getAprFee();
+				BigDecimal mayFee = customerCollectionDetail.getMayFee();
+				BigDecimal junFee = customerCollectionDetail.getJunFee();
+				BigDecimal julFee = customerCollectionDetail.getJulFee();
+				BigDecimal augFee = customerCollectionDetail.getAugFee();
+				BigDecimal sepFee = customerCollectionDetail.getSepFee();
+				BigDecimal octFee = customerCollectionDetail.getOctFee();
+				BigDecimal novFee = customerCollectionDetail.getNovFee();
+				BigDecimal decFee = customerCollectionDetail.getDecFee();
+				
+				BigDecimal expectedFee = fee.multiply(new BigDecimal(CommonUtils.getCurrentMonth()));
+				
+				BigDecimal pastFee = getDueMonthlyFee(janFee, Calendar.JANUARY)
+						.add(getDueMonthlyFee(febFee, Calendar.FEBRUARY))
+						.add(getDueMonthlyFee(marFee, Calendar.MARCH))
+						.add(getDueMonthlyFee(aprFee, Calendar.APRIL))
+						.add(getDueMonthlyFee(mayFee, Calendar.MAY))
+						.add(getDueMonthlyFee(junFee, Calendar.JUNE))
+						.add(getDueMonthlyFee(julFee, Calendar.JULY))
+						.add(getDueMonthlyFee(augFee, Calendar.AUGUST))
+						.add(getDueMonthlyFee(sepFee, Calendar.SEPTEMBER))
+						.add(getDueMonthlyFee(octFee, Calendar.OCTOBER))
+						.add(getDueMonthlyFee(novFee, Calendar.NOVEMBER))
+						.add(getDueMonthlyFee(decFee, Calendar.DECEMBER));
+				
+				if (expectedFee.compareTo(pastFee) > 0) {
+					unpaidCounter++;
+				} else {
+					paidCounter++;
+				}
+				
+			});
+			records.put(CommonConstant.KEY_TOTAL_PAID_CUSTOMER, paidCounter);
+			records.put(CommonConstant.KEY_TOTAL_UNPAID_CUSTOMER, unpaidCounter);
 		} else {
 			records.put(CommonConstant.KEY_TOTAL_CUSTOMER, 0);
 			records.put(CommonConstant.KEY_TOTAL_ASSIGNED_CUSTOMER, 0);
 			records.put(CommonConstant.KEY_TOTAL_UNASSIGNED_CUSTOMER, 0);
+			records.put(CommonConstant.KEY_TOTAL_PAID_CUSTOMER, 0);
+			records.put(CommonConstant.KEY_TOTAL_UNPAID_CUSTOMER, 0);
 		}
 		return records;
 	}
@@ -236,6 +280,26 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<CollectorCollection> findAllCollectionOfToday() {
 		return customerCollectionDao.findAllCollectionOfToday();
+	}
+
+	@Override
+	public Map<String, Integer> findPaidUnpaidInfo() {
+		Map<String, Integer> records = new HashMap<String, Integer>();
+		List<CustomerCollectionDetail> customerCollectionDetails = customerCollectionDao.findAll();
+		if (customerCollectionDetails != null && !customerCollectionDetails.isEmpty()) {
+			int month = CommonUtils.getCurrentMonth() - 1;
+			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+				if (month == Calendar.JANUARY) {
+					if (customerCollectionDetail.getFee().compareTo(customerCollectionDetail.getJanFee()) > 0) {
+						
+					}
+				}
+				records.put(CommonConstant.KEY_TOTAL_CUSTOMER, customerCollectionDetails.size());
+			}
+		} else {
+			records.put(CommonConstant.KEY_TOTAL_CUSTOMER, customerCollectionDetails.size());
+		}
+		return records;
 	}
 	
 }

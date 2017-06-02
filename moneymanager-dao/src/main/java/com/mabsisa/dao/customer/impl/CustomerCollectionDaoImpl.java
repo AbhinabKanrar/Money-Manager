@@ -137,7 +137,9 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 				oldCustomerCollectionDetail.setNovFee(rs.getBigDecimal("nov_fee"));
 				oldCustomerCollectionDetail.setDecFee(rs.getBigDecimal("dec_fee"));
 
-				rs.updateLong("collector_id", customerCollectionDetail.getCollectorId());
+				if (customerCollectionDetail.getCollectorId() != null) {
+					rs.updateLong("collector_id", customerCollectionDetail.getCollectorId());
+				}
 				rs.updateBigDecimal("jan_fee", customerCollectionDetail.getJanFee());
 				rs.updateBigDecimal("feb_fee", customerCollectionDetail.getFebFee());
 				rs.updateBigDecimal("mar_fee", customerCollectionDetail.getMarFee());
