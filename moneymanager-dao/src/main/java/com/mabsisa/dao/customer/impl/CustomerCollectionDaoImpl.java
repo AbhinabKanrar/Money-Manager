@@ -91,8 +91,10 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "sum(ccd.jun_fee) + sum(ccd.jul_fee) + sum(ccd.aug_fee) + sum(ccd.sep_fee) + sum(ccd.oct_fee) + "
 			+ "sum(ccd.nov_fee) + sum(ccd.dec_fee) as sum "
 			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
-			+ "on cd.customer_id=ccd.customer_id " + "join mm.user_auth_detail uad "
-			+ "on uad.user_id=ccd.collector_id " + "where ccd.collector_id is not null "
+			+ "on cd.customer_id=ccd.customer_id "
+			+ "join mm.user_auth_detail uad "
+			+ "on uad.user_id=ccd.collector_id "
+			+ "where ccd.collector_id is not null "
 			+ "group by ccd.collector_id,uad.username";
 
 	private static final String RETRIEVE_COLLECTION_OF_TODAY_SQL = "SELECT * FROM mm.collector_collection";
