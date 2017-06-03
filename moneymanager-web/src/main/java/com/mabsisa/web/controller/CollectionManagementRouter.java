@@ -3,9 +3,8 @@
  */
 package com.mabsisa.web.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
@@ -16,8 +15,11 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -74,9 +76,10 @@ public class CollectionManagementRouter {
 		return "collectionmanagement/listcustomercollectionDetail";
 	}
 	
+	@SuppressWarnings("deprecation")
 	@GetMapping("/download")
 	public void download(HttpServletResponse response) throws IOException {
-		String FILE_NAME = "/tmp/MyFirstExcel.xlsx";
+		String FILE_NAME = "/tmp/Customer Info v3.xlsx";
 		
 		XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Data");
@@ -88,6 +91,12 @@ public class CollectionManagementRouter {
         	Row row = sheet.createRow(rowNum++);
         	CellStyle style = workbook.createCellStyle();
         	style.setFillBackgroundColor(IndexedColors.BLUE.getIndex());
+        	Font font = workbook.createFont();
+            font.setBold(true);
+            style.setFont(font);
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setFillForegroundColor(HSSFColor.BLUE.index);
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
         	row.setRowStyle(style);
         	int colNum = 0;
         	Cell cell = row.createCell(colNum++);
@@ -116,6 +125,31 @@ public class CollectionManagementRouter {
         	cell.setCellValue("Note");
         	cell = row.createCell(colNum++);
         	cell.setCellValue("Collector ID");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Jan Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Feb Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Mar Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Apr Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("May Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Jun Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Jul Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Aug Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Sep Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Oct Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Nov Fee");
+        	cell = row.createCell(colNum++);
+        	cell.setCellValue("Dec Fee");
+        	
 			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
 				colNum = 0;
 				row = sheet.createRow(rowNum++);
@@ -145,9 +179,34 @@ public class CollectionManagementRouter {
 				cell.setCellValue(customerCollectionDetail.getNote());
 				cell = row.createCell(colNum++);
 				cell.setCellValue(customerCollectionDetail.getCollectionId());
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getJanFee() != null ? customerCollectionDetail.getJanFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getFebFee() != null ? customerCollectionDetail.getFebFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getMarFee() != null ? customerCollectionDetail.getMarFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getAprFee() != null ? customerCollectionDetail.getAprFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getMayFee() != null ? customerCollectionDetail.getMayFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getJunFee() != null ? customerCollectionDetail.getJunFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getJulFee() != null ? customerCollectionDetail.getJulFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getAugFee() != null ? customerCollectionDetail.getAugFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getSepFee() != null ? customerCollectionDetail.getSepFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getOctFee() != null ? customerCollectionDetail.getOctFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getNovFee() != null ? customerCollectionDetail.getNovFee().doubleValue() : 0);
+				cell = row.createCell(colNum++);
+				cell.setCellValue(customerCollectionDetail.getDecFee() != null ? customerCollectionDetail.getDecFee().doubleValue() : 0);
 			}
 		}
-        
+        File file = new File(FILE_NAME);
+        file.createNewFile();
         InputStream outputStream = new FileInputStream(FILE_NAME);
         
         response.addHeader("Content-disposition", "attachment;filename=Customer Info v3.xlsx");
