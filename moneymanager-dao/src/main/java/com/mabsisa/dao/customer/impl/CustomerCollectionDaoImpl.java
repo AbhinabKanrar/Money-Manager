@@ -87,9 +87,12 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
 			+ "on cd.customer_id=ccd.customer_id group by cd.region";
 
-	private static final String RETRIEVE_ASSIGNMENT_BY_COLLECTOR_SQL = "SELECT ccd.collector_id,count(cd.customer_id) "
+	private static final String RETRIEVE_ASSIGNMENT_BY_COLLECTOR_SQL = "SELECT ccd.collector_id,uad.username,count(cd.customer_id) "
 			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
-			+ "on cd.customer_id=ccd.customer_id " + "group by ccd.collector_id";
+			+ "on cd.customer_id=ccd.customer_id "
+			+ "join mm.user_auth_detail uad "
+			+ "on ccd.collector_id=uad.user_id "
+			+ "group by ccd.collector_id,uad.username";
 
 	private static final String RETRIEVE_COLLECTION_BY_COLLECTOR_SQL = "SELECT ccd.collector_id,uad.username,"
 			+ "sum(ccd.jan_fee) + sum(ccd.feb_fee) + sum(ccd.mar_fee) + sum(ccd.apr_fee) + sum(ccd.may_fee) + "
@@ -507,6 +510,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 						final CustomerAssignmentCollector customerAssignmentCollector = new CustomerAssignmentCollector();
 
 						customerAssignmentCollector.setCollectorId(rs.getLong("collector_id"));
+						customerAssignmentCollector.setCollectorName(rs.getString("username"));
 						customerAssignmentCollector.setCustomerCount(rs.getInt("count"));
 
 						return customerAssignmentCollector;

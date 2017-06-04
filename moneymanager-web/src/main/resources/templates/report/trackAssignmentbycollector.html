@@ -33,13 +33,13 @@
 			<table id="datatable" class="display responsive nowrap cell-border" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>Customer ID</th>
+						<th>Collector Name</th>
 						<th>Count</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="customerAssignmentCollector : ${customerAssignmentCollectors}">
-						<td th:text="${customerAssignmentCollector.collectorId != 0} ? ${customerAssignmentCollector.collectorId} : 'UNASSIGNED'"></td>
+						<td th:text="${customerAssignmentCollector.collectorName}"></td>
 						<td th:text="${customerAssignmentCollector.customerCount}"></td>
 					</tr>
 				</tbody>

@@ -105,7 +105,7 @@
 						<label>Current Month Fee</label>
 					</div>
 					<div class="w3-half">
-						<input  type="text" id="dueAmount" th:field="*{fee}" disabled="disabled"/>
+						<input  type="text" id="currentMonthFee" th:field="*{fee}" disabled="disabled"/>
 					</div>
 				</div>
 				<div th:if="${status} == 0" class="w3-row-padding">
@@ -138,7 +138,7 @@
 				</div>
 				<div th:if="${status} == 0" class="w3-row-padding" id="reason">
 					<div class="w3-half">
-						<label>Reason For Less Payment</label>
+						<label>Internal Note</label>
 					</div>
 					<div class="w3-half">
 						<input type="text" id="reasoncode" th:field="*{reasonCode}" required="required"/>

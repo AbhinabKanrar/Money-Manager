@@ -114,153 +114,105 @@ public class ReportServiceImpl implements ReportService {
 		return customerCollectionDao.findAllRevenueByRegion();
 	}
 
-	@Override
-	public Map<String, Object> findPaidUnPaidCustomerPerMonth() {
-		int janPaid = 0;
-		int janUnPaid = 0;
-		int febPaid = 0;
-		int febUnPaid = 0;
-		int marPaid = 0;
-		int marUnPaid = 0;
-		int aprPaid = 0;
-		int aprUnPaid = 0;
-		int mayPaid = 0;
-		int mayUnPaid = 0;
-		int junPaid = 0;
-		int junUnPaid = 0;
-		int julPaid = 0;
-		int julUnPaid = 0;
-		int augPaid = 0;
-		int augUnPaid = 0;
-		int sepPaid = 0;
-		int sepUnPaid = 0;
-		int octPaid = 0;
-		int octUnPaid = 0;
-		int novPaid = 0;
-		int novUnPaid = 0;
-		int decPaid = 0;
-		int decUnPaid = 0;
-		Map<String, Object> data = new HashMap<String, Object>();
-		Map<String, Map<String, Integer>> result = new HashMap<String, Map<String, Integer>>(); 
-		List<CustomerCollectionDetail> customerCollectionDetails = customerCollectionDao.findAll();
-		
-		if (customerCollectionDetails != null && !customerCollectionDetails.isEmpty()) {
-			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
-				result.put(customerCollectionDetail.getRegion(), null);
-			}
-			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
-				BigDecimal fee = customerCollectionDetail.getFee();
-				BigDecimal janFee = customerCollectionDetail.getJanFee();
-				BigDecimal febFee = customerCollectionDetail.getFebFee();
-				BigDecimal marFee = customerCollectionDetail.getMarFee();
-				BigDecimal aprFee = customerCollectionDetail.getAprFee();
-				BigDecimal mayFee = customerCollectionDetail.getMayFee();
-				BigDecimal junFee = customerCollectionDetail.getJunFee();
-				BigDecimal julFee = customerCollectionDetail.getJulFee();
-				BigDecimal augFee = customerCollectionDetail.getAugFee();
-				BigDecimal sepFee = customerCollectionDetail.getSepFee();
-				BigDecimal octFee = customerCollectionDetail.getOctFee();
-				BigDecimal novFee = customerCollectionDetail.getNovFee();
-				BigDecimal decFee = customerCollectionDetail.getDecFee();
-				
-				if (fee.subtract(janFee).compareTo(BigDecimal.ZERO) >= 0) {
-					janPaid++;
-				} else {
-					janUnPaid++;
-				}
-				
-				if (fee.subtract(febFee).compareTo(BigDecimal.ZERO) >= 0) {
-					febPaid++;
-				} else {
-					febUnPaid++;
-				}
-				
-				if (fee.subtract(marFee).compareTo(BigDecimal.ZERO) >= 0) {
-					marPaid++;
-				} else {
-					marUnPaid++;
-				}
-				
-				if (fee.subtract(aprFee).compareTo(BigDecimal.ZERO) >= 0) {
-					aprPaid++;
-				} else {
-					aprUnPaid++;
-				}
-				
-				if (fee.subtract(mayFee).compareTo(BigDecimal.ZERO) >= 0) {
-					mayPaid++;
-				} else {
-					mayUnPaid++;
-				}
-				if (fee.subtract(junFee).compareTo(BigDecimal.ZERO) >= 0) {
-					junPaid++;
-				} else {
-					junUnPaid++;
-				}
-				
-				if (fee.subtract(julFee).compareTo(BigDecimal.ZERO) >= 0) {
-					julPaid++;
-				} else {
-					julUnPaid++;
-				}
-				
-				if (fee.subtract(augFee).compareTo(BigDecimal.ZERO) >= 0) {
-					augPaid++;
-				} else {
-					augUnPaid++;
-				}
-				
-				if (fee.subtract(sepFee).compareTo(BigDecimal.ZERO) >= 0) {
-					sepPaid++;
-				} else {
-					sepUnPaid++;
-				}
-				
-				if (fee.subtract(octFee).compareTo(BigDecimal.ZERO) >= 0) {
-					octPaid++;
-				} else {
-					octUnPaid++;
-				}
-				
-				if (fee.subtract(novFee).compareTo(BigDecimal.ZERO) >= 0) {
-					novPaid++;
-				} else {
-					novUnPaid++;
-				}
-				
-				if (fee.subtract(decFee).compareTo(BigDecimal.ZERO) >= 0) {
-					decPaid++;
-				} else {
-					decUnPaid++;
-				}
-				
-				
-				
-//				BigDecimal expectedFee = fee.multiply(new BigDecimal(CommonUtils.getCurrentMonth()));
+//	@Override
+//	public Map<String, Object> findPaidUnPaidCustomerPerMonth() {
+//		Map<String, Object> data = new HashMap<String, Object>();
+//		Map<String, Map<String, Integer>> result = new HashMap<String, Map<String, Integer>>(); 
+//		List<CustomerCollectionDetail> customerCollectionDetails = customerCollectionDao.findAll();
+//		
+//		if (customerCollectionDetails != null && !customerCollectionDetails.isEmpty()) {
+//			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+//				result.put(customerCollectionDetail.getRegion(), null);
+//			}
+//			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+//				BigDecimal fee = customerCollectionDetail.getFee();
+//				BigDecimal janFee = customerCollectionDetail.getJanFee();
+//				BigDecimal febFee = customerCollectionDetail.getFebFee();
+//				BigDecimal marFee = customerCollectionDetail.getMarFee();
+//				BigDecimal aprFee = customerCollectionDetail.getAprFee();
+//				BigDecimal mayFee = customerCollectionDetail.getMayFee();
+//				BigDecimal junFee = customerCollectionDetail.getJunFee();
+//				BigDecimal julFee = customerCollectionDetail.getJulFee();
+//				BigDecimal augFee = customerCollectionDetail.getAugFee();
+//				BigDecimal sepFee = customerCollectionDetail.getSepFee();
+//				BigDecimal octFee = customerCollectionDetail.getOctFee();
+//				BigDecimal novFee = customerCollectionDetail.getNovFee();
+//				BigDecimal decFee = customerCollectionDetail.getDecFee();
 //				
-//				BigDecimal pastFee = getDueMonthlyFee(janFee, Calendar.JANUARY)
-//						.add(getDueMonthlyFee(febFee, Calendar.FEBRUARY)).add(getDueMonthlyFee(marFee, Calendar.MARCH))
-//						.add(getDueMonthlyFee(aprFee, Calendar.APRIL)).add(getDueMonthlyFee(mayFee, Calendar.MAY))
-//						.add(getDueMonthlyFee(junFee, Calendar.JUNE)).add(getDueMonthlyFee(julFee, Calendar.JULY))
-//						.add(getDueMonthlyFee(augFee, Calendar.AUGUST)).add(getDueMonthlyFee(sepFee, Calendar.SEPTEMBER))
-//						.add(getDueMonthlyFee(octFee, Calendar.OCTOBER)).add(getDueMonthlyFee(novFee, Calendar.NOVEMBER))
-//						.add(getDueMonthlyFee(decFee, Calendar.DECEMBER));
-//				
-//				customerCollectionDetail.setDue(expectedFee.subtract(pastFee));
-//				
-//				if (customerCollectionDetail.getDue().compareTo(BigDecimal.ZERO) >= 0) {
-//					unpaidCustomerNumber++;
+//				if (fee.subtract(janFee).compareTo(BigDecimal.ZERO) >= 0) {
 //				} else {
-//					paidCustomerNumber++;
 //				}
-				
-			}
-//			data.put(CommonConstant.KEY_TOTAL_PAID_CUSTOMER, paidCustomerNumber);
-//			data.put(CommonConstant.KEY_TOTAL_UNPAID_CUSTOMER, unpaidCustomerNumber);
-			data.put(CommonConstant.KEY_TOTAL_CUSTOMER, customerCollectionDetails.size());
-		}
-		return data;
-	}
+//				
+//				if (fee.subtract(febFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(marFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(aprFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(mayFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				if (fee.subtract(junFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(julFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(augFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(sepFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(octFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(novFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				if (fee.subtract(decFee).compareTo(BigDecimal.ZERO) >= 0) {
+//				} else {
+//				}
+//				
+//				
+//				
+////				BigDecimal expectedFee = fee.multiply(new BigDecimal(CommonUtils.getCurrentMonth()));
+////				
+////				BigDecimal pastFee = getDueMonthlyFee(janFee, Calendar.JANUARY)
+////						.add(getDueMonthlyFee(febFee, Calendar.FEBRUARY)).add(getDueMonthlyFee(marFee, Calendar.MARCH))
+////						.add(getDueMonthlyFee(aprFee, Calendar.APRIL)).add(getDueMonthlyFee(mayFee, Calendar.MAY))
+////						.add(getDueMonthlyFee(junFee, Calendar.JUNE)).add(getDueMonthlyFee(julFee, Calendar.JULY))
+////						.add(getDueMonthlyFee(augFee, Calendar.AUGUST)).add(getDueMonthlyFee(sepFee, Calendar.SEPTEMBER))
+////						.add(getDueMonthlyFee(octFee, Calendar.OCTOBER)).add(getDueMonthlyFee(novFee, Calendar.NOVEMBER))
+////						.add(getDueMonthlyFee(decFee, Calendar.DECEMBER));
+////				
+////				customerCollectionDetail.setDue(expectedFee.subtract(pastFee));
+////				
+////				if (customerCollectionDetail.getDue().compareTo(BigDecimal.ZERO) >= 0) {
+////					unpaidCustomerNumber++;
+////				} else {
+////					paidCustomerNumber++;
+////				}
+//				
+//			}
+////			data.put(CommonConstant.KEY_TOTAL_PAID_CUSTOMER, paidCustomerNumber);
+////			data.put(CommonConstant.KEY_TOTAL_UNPAID_CUSTOMER, unpaidCustomerNumber);
+//			data.put(CommonConstant.KEY_TOTAL_CUSTOMER, customerCollectionDetails.size());
+//		}
+//		return data;
+//	}
 
 	private BigDecimal getDueMonthlyFee(BigDecimal monthlyFee, int month) {
 		if (month > (CommonUtils.getCurrentMonth() - 1)) {

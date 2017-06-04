@@ -80,8 +80,10 @@ public class AssignmentController {
 		long collectorId = 0;
 		List<Customer> customers = new ArrayList<Customer>();
 		List<User> users = new ArrayList<User>();
+		User collector = new User();
 		try {
 			collectorId = ServletRequestUtils.getLongParameter(request, "collectorId");
+			collector = userService.findUserByUserId(collectorId);
 			String searchParam = ServletRequestUtils.getStringParameter(request, "searchParam");
 			SearchParam param = SearchParam.valueOf(searchParam);
 			customers = customerService.findAll();
@@ -120,6 +122,7 @@ public class AssignmentController {
 			e.printStackTrace();
 		}
 		model.addAttribute("users", users);
+		model.addAttribute("collector", collector);
 		model.addAttribute("collectorId", collectorId);
 		model.addAttribute("searchParams", searchParams);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());

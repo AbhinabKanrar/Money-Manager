@@ -23,10 +23,8 @@ $(document).ready(
 			});
 			$("#customer-collectorid-edit-button").click(
 					function() {
-						$("#customer-collectorid-select")
-								.removeClass("w3-hide");
-						$("#customer-collectorid-text").removeClass("w3-show")
-								.addClass("w3-hide");
+						$("#customer-collectorid-select").removeClass("w3-hide");
+						$("#customer-collectorid-text").removeClass("w3-show").addClass("w3-hide");
 					});
 			$("#printer").click(function() {
 				window.print();

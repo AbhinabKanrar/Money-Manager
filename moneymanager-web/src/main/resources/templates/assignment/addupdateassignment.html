@@ -27,7 +27,7 @@
 			<form action="/assignment/search" method="post">
 				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 				<p>
-					<label>Collector : </label>
+					<label>Collector Name: </label>
 					 <select name="collectorId">
 						<option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
 					</select>
@@ -49,8 +49,8 @@
 					<input type="hidden" th:value="${collectorId}" name="collectorId" required="required"/>
 					<table>
 						<tr>
-							<td>Collector ID : </td>
-							<td th:text="${collectorId}"></td>
+							<td>Collector Name : </td>
+							<td th:text="${collector.username}"></td>
 						</tr>
 						<tr>
 							<td>Choose Region : </td>
@@ -73,8 +73,8 @@
 					<input type="hidden" th:value="${collectorId}" name="collectorId" required="required"/>
 					<table>
 						<tr>
-							<td>Collector ID : </td>
-							<td th:text="${collectorId}"></td>
+							<td>Collector Name : </td>
+							<td th:text="${collector.username}"></td>
 						</tr>
 						<tr>
 							<td>Choose Building : </td>
@@ -97,8 +97,8 @@
 					<input type="hidden" th:value="${collectorId}" name="collectorId" required="required"/>
 					<table>
 						<tr>
-							<td>Collector ID : </td>
-							<td th:text="${collectorId}"></td>
+							<td>Collector Name : </td>
+							<td th:text="${collector.username}"></td>
 						</tr>
 						<tr>
 							<td>Choose Customer : </td>

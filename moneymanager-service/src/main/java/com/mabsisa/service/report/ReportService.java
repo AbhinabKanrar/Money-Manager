@@ -28,7 +28,7 @@ public interface ReportService {
 
 	List<RevenueByRegion> findAllRevenueByRegion();
 	
-	Map<String, Object> findPaidUnPaidCustomerPerMonth();
+//	Map<String, Object> findPaidUnPaidCustomerPerMonth();
 	
 	List<CustomerAssignmentCollector> findAllAssignmentByCollector();
 	
