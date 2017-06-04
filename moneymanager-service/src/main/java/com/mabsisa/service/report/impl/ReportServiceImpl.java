@@ -39,6 +39,8 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public Map<String, Integer> findAssignmentRecord() {
 		int SIZE  = 0;
+		paidCounter = 0;
+		unpaidCounter = 0;
 		Map<String, Integer> records = new HashMap<String, Integer>();
 		List<CustomerCollectionDetail> customerCollectionDetails = customerCollectionDao.findAll();
 		if (customerCollectionDetails != null && !customerCollectionDetails.isEmpty()) {
@@ -98,7 +100,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
-	public List<CustomerCollectionDetailAudit> findAll() {
+	public List<CustomerCollectionDetailAudit> findAllCustomerCollectionDetailAudit() {
 		return customerCollectionDao.findAllCustomerCollectionDetailAudit();
 	}
 

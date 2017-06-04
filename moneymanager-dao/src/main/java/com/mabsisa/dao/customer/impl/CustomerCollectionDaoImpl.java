@@ -69,7 +69,12 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "mm.customer_detail cust join mm.customer_collection_detail collection "
 			+ "on cust.customer_id=collection.customer_id " + "where collection.collection_id = :collection_id";
 
-	private static final String RETRIEVE_AUDIT_SQL = "SELECT * FROM mm.customer_collection_detail_audit";
+	private static final String RETRIEVE_AUDIT_SQL = "SELECT cca.audit_id,cca.customer_id,cd.name,cd.region,cd.building,cd.address,"
+			+ "cd.floor,cca.collector_id,uad.username,cca.location,cca.reason,cca.collection_ts "
+			+ "FROM mm.customer_collection_detail_audit cca join mm.user_auth_detail uad "
+			+ "on cca.collector_id=uad.user_id "
+			+ "join mm.customer_detail cd "
+			+ "on cca.customer_id=cd.customer_id";
 
 	private static final String RETRIEVE_CUSTOMER_PER_REGION_SQL = "SELECT region,count(customer_id),"
 			+ "(count(customer_id))*100/(SELECT count(customer_id) FROM mm.customer_detail) as percentage, "
@@ -91,20 +96,18 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 			+ "sum(ccd.jun_fee) + sum(ccd.jul_fee) + sum(ccd.aug_fee) + sum(ccd.sep_fee) + sum(ccd.oct_fee) + "
 			+ "sum(ccd.nov_fee) + sum(ccd.dec_fee) as sum "
 			+ "FROM mm.customer_detail cd join mm.customer_collection_detail ccd "
-			+ "on cd.customer_id=ccd.customer_id "
-			+ "join mm.user_auth_detail uad "
-			+ "on uad.user_id=ccd.collector_id "
-			+ "where ccd.collector_id is not null "
+			+ "on cd.customer_id=ccd.customer_id " + "join mm.user_auth_detail uad "
+			+ "on uad.user_id=ccd.collector_id " + "where ccd.collector_id is not null "
 			+ "group by ccd.collector_id,uad.username";
 
 	private static final String RETRIEVE_COLLECTION_OF_TODAY_SQL = "SELECT * FROM mm.collector_collection";
-	
+
 	private static final String UPDATE_SQL = "select * from mm.customer_collection_detail where collection_id = ? for update";
-	
+
 	private static final String UPDATE_AUDIT_SQL = "SELECT * FROM mm.collector_collection where collector_id=? FOR UPDATE";
-	
+
 	private static final String UPDATE_REFRESH_AUDIT_SQL = "update mm.collector_collection set amount = :amount";
-	
+
 	private static final String BATCH_UPDATE_SQL = "update mm.customer_collection_detail set collector_id=:collector_id where customer_id=:customer_id";
 
 	@Override
@@ -248,7 +251,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		jdbcTemplate.query(psc, rowHandler);
 
 		updateCollectorAudit(customerCollectionDetail);
-		
+
 		if (customerCollectionDetail.getDue().compareTo(customerCollectionDetail.getActual()) > 0
 				&& customerCollectionDetail.getReasonCode() != null
 				&& !customerCollectionDetail.getReasonCode().trim().isEmpty()) {
@@ -270,12 +273,13 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
-				
+
 				collectorCollection.setId(rs.getLong("id"));
 				collectorCollection.setCollectorId(rs.getLong("collector_id"));
 				collectorCollection.setCollectorName(rs.getString("collector_name"));
 				collectorCollection.setCollectionAmount(rs.getBigDecimal("amount"));
-				rs.updateBigDecimal("amount", customerCollectionDetail.getActual().add(collectorCollection.getCollectionAmount()));
+				rs.updateBigDecimal("amount",
+						customerCollectionDetail.getActual().add(collectorCollection.getCollectionAmount()));
 
 				rs.updateRow();
 			}
@@ -285,7 +289,7 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 		jdbcTemplate.query(psc, rowHandler);
 
 	}
-	
+
 	private CustomerCollectionDetail updateAudit(CustomerCollectionDetail customerCollectionDetail) {
 
 		Map<String, Object> params = new HashMap<>(5);
@@ -406,7 +410,13 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 
 						customerCollectionDetailAudit.setAuditId(rs.getLong("audit_id"));
 						customerCollectionDetailAudit.setCustomerId(rs.getLong("customer_id"));
+						customerCollectionDetailAudit.setCustomerName(rs.getString("name"));
+						customerCollectionDetailAudit.setRegion(rs.getString("region"));
+						customerCollectionDetailAudit.setBuilding(rs.getString("building"));
+						customerCollectionDetailAudit.setAddress(rs.getString("address"));
+						customerCollectionDetailAudit.setFloor(rs.getString("floor"));
 						customerCollectionDetailAudit.setCollectorId(rs.getLong("collector_id"));
+						customerCollectionDetailAudit.setCollectorName(rs.getString("username"));
 						customerCollectionDetailAudit.setLocation(rs.getString("location"));
 						customerCollectionDetailAudit.setReason(rs.getString("reason"));
 						customerCollectionDetailAudit.setCollectionTs(rs.getTimestamp("collection_ts"));
@@ -514,8 +524,8 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
 	public List<CollectorCollection> findAllCollectionByCollector() {
-		List<CollectorCollection> collectorCollections = jdbcTemplate
-				.query(RETRIEVE_COLLECTION_BY_COLLECTOR_SQL, new RowMapper<CollectorCollection>() {
+		List<CollectorCollection> collectorCollections = jdbcTemplate.query(RETRIEVE_COLLECTION_BY_COLLECTOR_SQL,
+				new RowMapper<CollectorCollection>() {
 
 					@Override
 					public CollectorCollection mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -540,8 +550,8 @@ public class CustomerCollectionDaoImpl implements CustomerCollectionDao {
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
 	public List<CollectorCollection> findAllCollectionOfToday() {
-		List<CollectorCollection> collectorCollections = jdbcTemplate
-				.query(RETRIEVE_COLLECTION_OF_TODAY_SQL, new RowMapper<CollectorCollection>() {
+		List<CollectorCollection> collectorCollections = jdbcTemplate.query(RETRIEVE_COLLECTION_OF_TODAY_SQL,
+				new RowMapper<CollectorCollection>() {
 
 					@Override
 					public CollectorCollection mapRow(ResultSet rs, int rowNum) throws SQLException {

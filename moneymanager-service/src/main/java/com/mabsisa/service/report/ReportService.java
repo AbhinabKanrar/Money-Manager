@@ -22,7 +22,7 @@ public interface ReportService {
 	
 	Map<String, Integer> findPaidUnpaidInfo();
 	
-	List<CustomerCollectionDetailAudit> findAll();
+	List<CustomerCollectionDetailAudit> findAllCustomerCollectionDetailAudit();
 	
 	List<CustomerPerRegion> findAllCustomerPerRegion();
 

@@ -6,6 +6,7 @@ package com.mabsisa.service.customer.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,49 @@ public class CustomerCollectionServiceImpl implements CustomerCollectionService 
 		return customerCollectionDao.findAll();
 	}
 
+	@Override
+	public List<CustomerCollectionDetail> findByMonth(int month) {
+		List<CustomerCollectionDetail> customerCollectionDetails = customerCollectionDao.findAll();
+		if (customerCollectionDetails != null && !customerCollectionDetails.isEmpty()) {
+			List<CustomerCollectionDetail> unpaidCustomerCollectionDetails = new ArrayList<CustomerCollectionDetail>();
+			int currMonth = month - 1;
+			for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+				BigDecimal fee = customerCollectionDetail.getFee();
+				BigDecimal monthFee = BigDecimal.ZERO;
+				if (currMonth == Calendar.JANUARY) {
+					monthFee = customerCollectionDetail.getJanFee();
+				} else if(currMonth == Calendar.FEBRUARY) {
+					monthFee = customerCollectionDetail.getFebFee();
+				} else if(currMonth == Calendar.MARCH) {
+					monthFee = customerCollectionDetail.getMarFee();
+				} else if(currMonth == Calendar.APRIL) {
+					monthFee = customerCollectionDetail.getAprFee();
+				} else if(currMonth == Calendar.MAY) {
+					monthFee = customerCollectionDetail.getMayFee();
+				} else if(currMonth == Calendar.JUNE) {
+					monthFee = customerCollectionDetail.getJunFee();
+				} else if(currMonth == Calendar.JULY) {
+					monthFee = customerCollectionDetail.getJulFee();
+				} else if(currMonth == Calendar.AUGUST) {
+					monthFee = customerCollectionDetail.getAugFee();
+				} else if(currMonth == Calendar.SEPTEMBER) {
+					monthFee = customerCollectionDetail.getSepFee();
+				} else if(currMonth == Calendar.OCTOBER) {
+					monthFee = customerCollectionDetail.getOctFee();
+				} else if(currMonth == Calendar.NOVEMBER) {
+					monthFee = customerCollectionDetail.getNovFee();
+				} else if(currMonth == Calendar.DECEMBER) {
+					monthFee = customerCollectionDetail.getDecFee();
+				}
+				if (fee.compareTo(monthFee) > 0) {
+					unpaidCustomerCollectionDetails.add(customerCollectionDetail);
+				}
+			}
+			return unpaidCustomerCollectionDetails;
+		}
+		return Collections.emptyList();
+	}
+	
 	@Override
 	public CustomerCollectionDetail findByCollectionId(long collectionId) {
 		return customerCollectionDao.findByCollectionId(collectionId);

@@ -80,7 +80,7 @@
 							<td>Choose Building : </td>
 							<td>
 								<select multiple="multiple" name="buildingRegions">
-									<option th:each="buildingRegion : ${buildingRegions}" th:value="${buildingRegion.key} + ',' + ${buildingRegion.value}" th:text="'Building : ' + ${buildingRegion.key} +', Region : ' + ${buildingRegion.value}"></option>
+									<option th:each="buildingRegion : ${buildingRegions}" th:value="${buildingRegion.key} + ',' + ${buildingRegion.value}" th:text="${buildingRegion.key} +', ' + ${buildingRegion.value}"></option>
 								</select>
 							</td>
 						</tr>
@@ -104,7 +104,7 @@
 							<td>Choose Customer : </td>
 							<td>
 								<select multiple="multiple" name="customers">
-									<option th:each="customer : ${customers}" th:value="${customer.customerId}" th:text="'Name : ' + ${customer.name} + ',Building : ' + ${customer.building} + ', Region: ' + ${customer.region}"></option>
+									<option th:each="customer : ${customers}" th:value="${customer.customerId}" th:text="${customer.name} + ', ' + ${customer.building} + ', ' + ${customer.address} + ', ' + ${customer.region}"></option>
 								</select>
 							</td>
 						</tr>

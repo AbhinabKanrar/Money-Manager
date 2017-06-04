@@ -86,7 +86,7 @@ public class ReportController {
 	public String collectionMismatchLocationTracking(Model model) {
 		List<CustomerCollectionDetailAudit> customerCollectionDetailAudits = new ArrayList<CustomerCollectionDetailAudit>();
 		try {
-			customerCollectionDetailAudits = reportService.findAll();
+			customerCollectionDetailAudits = reportService.findAllCustomerCollectionDetailAudit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errMessage", "Unable to fetch the data at this moment");

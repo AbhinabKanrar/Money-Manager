@@ -16,7 +16,13 @@ public class CustomerCollectionDetailAudit implements Serializable {
 	
 	private Long auditId;
 	private Long customerId;
+	private String customerName;
+	private String region;
+	private String building;
+	private String address;
+	private String floor;
 	private Long collectorId;
+	private String collectorName;
 	private String location;
 	private String reason;
 	private Timestamp collectionTs;
@@ -33,11 +39,47 @@ public class CustomerCollectionDetailAudit implements Serializable {
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-	public long getCollectorId() {
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	public String getBuilding() {
+		return building;
+	}
+	public void setBuilding(String building) {
+		this.building = building;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getFloor() {
+		return floor;
+	}
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+	public Long getCollectorId() {
 		return collectorId;
 	}
-	public void setCollectorId(long collectorId) {
+	public void setCollectorId(Long collectorId) {
 		this.collectorId = collectorId;
+	}
+	public String getCollectorName() {
+		return collectorName;
+	}
+	public void setCollectorName(String collectorName) {
+		this.collectorName = collectorName;
 	}
 	public String getLocation() {
 		return location;

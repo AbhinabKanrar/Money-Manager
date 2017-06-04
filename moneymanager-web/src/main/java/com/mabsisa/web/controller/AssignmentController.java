@@ -103,7 +103,7 @@ public class AssignmentController {
 					for(String building : buildings) {
 						for (Customer customer : customers) {
 							if (customer.getBuilding().equalsIgnoreCase(building)) {
-								buildingRegions.put(building, customer.getRegion());
+								buildingRegions.put(building + "," +customer.getAddress(), customer.getRegion());
 							}
 						}
 					}
