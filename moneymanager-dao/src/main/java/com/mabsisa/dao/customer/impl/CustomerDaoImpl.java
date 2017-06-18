@@ -80,29 +80,30 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		jdbcNTemplate.update(INSERT_SQL, params);
 
-		CustomerCollectionDetail customerCollectionDetail = new CustomerCollectionDetail();
-		customerCollectionDetail.setCustomerId(customer.getCustomerId());
-		saveCustomerToCollectionMapping(customerCollectionDetail);
-		
+		 CustomerCollectionDetail customerCollectionDetail = new
+		 CustomerCollectionDetail();
+		 customerCollectionDetail.setCustomerId(customer.getCustomerId());
+		 saveCustomerToCollectionMapping(customerCollectionDetail);
+
 		return customer;
 	}
 
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
-	public List<Customer> save(List<Customer> customers) {
+	public List<Customer> save(List<Customer> customers, List<CustomerCollectionDetail> customerCollectionDetails) {
 
 		int counter = 0;
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object>[] params = new Map[customers.size()];
-		List<CustomerCollectionDetail> customerCollectionDetails = new ArrayList<CustomerCollectionDetail>();
-		CustomerCollectionDetail customerCollectionDetail;
-		
+//		List<CustomerCollectionDetail> customerCollectionDetails = new ArrayList<CustomerCollectionDetail>();
+//		CustomerCollectionDetail customerCollectionDetail;
+
 		for (Customer customer : customers) {
 			Map<String, Object> param = new HashMap<String, Object>(13);
-			
-			customer.setCustomerId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
-			
+
+//			customer.setCustomerId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+
 			param.put("customer_id", customer.getCustomerId());
 			param.put("region", customer.getRegion());
 			param.put("building", customer.getBuilding());
@@ -116,16 +117,16 @@ public class CustomerDaoImpl implements CustomerDao {
 			param.put("left_travel", customer.getLeftTravel());
 			param.put("note", customer.getNote());
 
-			customerCollectionDetail = new CustomerCollectionDetail();
-			customerCollectionDetail.setCustomerId(customer.getCustomerId());
-			customerCollectionDetails.add(customerCollectionDetail);
-			
+//			customerCollectionDetail = new CustomerCollectionDetail();
+//			customerCollectionDetail.setCustomerId(customer.getCustomerId());
+//			customerCollectionDetails.add(customerCollectionDetail);
+
 			params[counter] = param;
 			counter++;
 		}
 
 		jdbcNTemplate.batchUpdate(INSERT_SQL, params);
-		
+
 		saveCustomerToCollectionMapping(customerCollectionDetails);
 
 		return customers;
@@ -157,14 +158,15 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		return customerCollectionDetail;
 	}
-	
-	public List<CustomerCollectionDetail> saveCustomerToCollectionMapping(List<CustomerCollectionDetail> customerCollectionDetails) {
+
+	public List<CustomerCollectionDetail> saveCustomerToCollectionMapping(
+			List<CustomerCollectionDetail> customerCollectionDetails) {
 		int counter = 0;
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object>[] params = new Map[customerCollectionDetails.size()];
 		
-		for(CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
+		for (CustomerCollectionDetail customerCollectionDetail : customerCollectionDetails) {
 			Map<String, Object> param = new HashMap<>(15);
 
 			customerCollectionDetail.setCollectionId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
@@ -172,28 +174,40 @@ public class CustomerDaoImpl implements CustomerDao {
 			param.put("collection_id", customerCollectionDetail.getCollectionId());
 			param.put("customer_id", customerCollectionDetail.getCustomerId());
 			param.put("collector_id", null);
-			param.put("jan_fee", BigDecimal.ZERO);
-			param.put("feb_fee", BigDecimal.ZERO);
-			param.put("mar_fee", BigDecimal.ZERO);
-			param.put("apr_fee", BigDecimal.ZERO);
-			param.put("may_fee", BigDecimal.ZERO);
-			param.put("jun_fee", BigDecimal.ZERO);
-			param.put("jul_fee", BigDecimal.ZERO);
-			param.put("aug_fee", BigDecimal.ZERO);
-			param.put("sep_fee", BigDecimal.ZERO);
-			param.put("oct_fee", BigDecimal.ZERO);
-			param.put("nov_fee", BigDecimal.ZERO);
-			param.put("dec_fee", BigDecimal.ZERO);
-			
+			param.put("jan_fee", customerCollectionDetail.getJanFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getJanFee());
+			param.put("feb_fee", customerCollectionDetail.getFebFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getFebFee());
+			param.put("mar_fee", customerCollectionDetail.getMarFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getMarFee());
+			param.put("apr_fee", customerCollectionDetail.getAprFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getAprFee());
+			param.put("may_fee", customerCollectionDetail.getMayFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getMayFee());
+			param.put("jun_fee", customerCollectionDetail.getJunFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getJunFee());
+			param.put("jul_fee", customerCollectionDetail.getJulFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getJulFee());
+			param.put("aug_fee", customerCollectionDetail.getAugFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getAugFee());
+			param.put("sep_fee", customerCollectionDetail.getSepFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getSepFee());
+			param.put("oct_fee", customerCollectionDetail.getOctFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getOctFee());
+			param.put("nov_fee", customerCollectionDetail.getNovFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getNovFee());
+			param.put("dec_fee", customerCollectionDetail.getDecFee() == null ? BigDecimal.ZERO
+					: customerCollectionDetail.getDecFee());
+
 			params[counter] = param;
 			counter++;
 		}
 
 		jdbcNTemplate.batchUpdate(INSERT_COLLECTION_SQL, params);
-		
+
 		return customerCollectionDetails;
 	}
-	
+
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Customer update(Customer customer) {
@@ -219,7 +233,7 @@ public class CustomerDaoImpl implements CustomerDao {
 				oldCustomer.setMahal(rs.getString("mahal"));
 				oldCustomer.setTelephone(rs.getString("telephone"));
 				oldCustomer.setLeftTravel(rs.getString("left_travel"));
-				oldCustomer.setNote(rs.getString("note")); 
+				oldCustomer.setNote(rs.getString("note"));
 
 				rs.updateString("region", customer.getRegion());
 				rs.updateString("building", customer.getBuilding());
@@ -250,7 +264,7 @@ public class CustomerDaoImpl implements CustomerDao {
 		jdbcTemplate.update(DELETE_SQL, params, types);
 		return customer;
 	}
-	
+
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
 	public List<Customer> findAll() {
