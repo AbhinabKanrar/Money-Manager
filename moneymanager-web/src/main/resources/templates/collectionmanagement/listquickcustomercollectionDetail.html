@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head th:include="fragments/header"/>
+<body>
+	<div class="w3-bar w3-top w3-theme w3-large header" th:include="fragments/top"/>
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar"><br/>
+	  <hr/>
+	  <div class="w3-container">
+	    <h5>Dashboard</h5>
+	  </div>
+	  <div class="w3-bar-block" th:include="fragments/menu"/>
+	</nav>
+	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
+	<div class="w3-main" id="ui-view">
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i>Quick Customer Billing History
+		</div>
+		<div class="w3-input w3-large">
+			<b>View Quick Billing History</b>
+		</div>
+		<p class="error" th:text="${errMessage}"></p>
+		<div class="w3-responsive">
+			<table id="mappingdatatable" class="display responsive nowrap cell-border"
+				cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<!-- 
+						<th>Collector ID</th>
+						 -->
+						<th>Region</th>
+						<th>Building</th>
+						<th>Address</th>
+						<th>Client</th>
+						<th>Name</th>
+						<th>Floor</th>
+						<th>Fee</th>
+						<th>Mahal</th>
+						<th>Telephone</th>
+						<th>Left/travel</th>
+						<th>Note</th>
+						<th>January Fee</th>
+						<th>February Fee</th>
+						<th>March Fee</th>
+						<th>April Fee</th>
+						<th>May Fee</th>
+						<th>June Fee</th>
+						<th>July Fee</th>
+						<th>August Fee</th>
+						<th>September Fee</th>
+						<th>October Fee</th>
+						<th>November Fee</th>
+						<th>December Fee</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="customerCollectionDetail : ${customerCollectionDetails}">
+						<td th:text="${customerCollectionDetail.region}"></td>
+						<td th:text="${customerCollectionDetail.building}"></td>
+						<td th:text="${customerCollectionDetail.address}"></td>
+						<td th:text="${customerCollectionDetail.client}"></td>
+						<td th:text="${customerCollectionDetail.name}"></td>
+						<td th:text="${customerCollectionDetail.floor}"></td>
+						<td th:text="${customerCollectionDetail.fee}"></td>
+						<td th:text="${customerCollectionDetail.mahal}"></td>
+						<td th:text="${customerCollectionDetail.telephone}"></td>
+						<td th:text="${customerCollectionDetail.leftTravel}"></td>
+						<td th:text="${customerCollectionDetail.note}"></td>
+						<td th:switch="${customerCollectionDetail.janFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.febFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.marFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.aprFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.mayFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.junFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.julFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.augFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.sepFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.octFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.novFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<td th:switch="${customerCollectionDetail.decFee.compareTo(customerCollectionDetail.fee) >= 0}">
+							<span th:case="true">Paid</span>
+							<span th:case="false">Unpaid</span>
+						</td>
+						<!-- 
+						<td th:text="${customerCollectionDetail.janFee}"></td>
+						<td th:text="${customerCollectionDetail.febFee}"></td>
+						<td th:text="${customerCollectionDetail.marFee}"></td>
+						<td th:text="${customerCollectionDetail.aprFee}"></td>
+						<td th:text="${customerCollectionDetail.mayFee}"></td>
+						<td th:text="${customerCollectionDetail.junFee}"></td>
+						<td th:text="${customerCollectionDetail.julFee}"></td>
+						<td th:text="${customerCollectionDetail.augFee}"></td>
+						<td th:text="${customerCollectionDetail.sepFee}"></td>
+						<td th:text="${customerCollectionDetail.octFee}"></td>
+						<td th:text="${customerCollectionDetail.novFee}"></td>
+						<td th:text="${customerCollectionDetail.decFee}"></td>
+						-->
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script src="/js/lib/jquery.min.js"></script>
+	<script src="/js/lib/jquery.dataTables.min.js"></script>
+	<script src="/js/app.js"></script>
+</body>
+</html>

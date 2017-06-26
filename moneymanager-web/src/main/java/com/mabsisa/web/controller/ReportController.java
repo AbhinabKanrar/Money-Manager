@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mabsisa.common.model.CollectorCollection;
 import com.mabsisa.common.model.CustomerAssignmentCollector;
+import com.mabsisa.common.model.CustomerCollectionDetail;
 import com.mabsisa.common.model.CustomerCollectionDetailAudit;
 import com.mabsisa.common.model.CustomerPerRegion;
 import com.mabsisa.common.model.RevenueByRegion;
 import com.mabsisa.common.util.CommonConstant;
 import com.mabsisa.common.util.CommonUtils;
+import com.mabsisa.service.customer.CustomerCollectionService;
 import com.mabsisa.service.report.ReportService;
 
 /**
@@ -34,6 +36,9 @@ public class ReportController {
 
 	@Autowired
 	private ReportService reportService;
+	
+	@Autowired
+	private CustomerCollectionService customerCollectionService;
 
 	@GetMapping("/dashboard")
 	public String index(Model model) {
@@ -41,6 +46,20 @@ public class ReportController {
 		return "report/reportdashboard";
 	}
 
+	@GetMapping("/quickreport")
+	public String quickReport(Model model) {
+		List<CustomerCollectionDetail> customerCollectionDetails = new ArrayList<CustomerCollectionDetail>();
+		try {
+			customerCollectionDetails = customerCollectionService.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("customerCollectionDetails", customerCollectionDetails);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/listquickcustomercollectionDetail";
+	}
+	
 	@GetMapping("/trackassignment")
 	public String trackAssignment(Model model) {
 		Map<String, Integer> records = new HashMap<String, Integer>();
